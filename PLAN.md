@@ -66,7 +66,7 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
   - `20260909120200_rpc_functions.sql` — `create_order` (atomik, SECURITY DEFINER, re-pricing dari katalog), `get_daily_sales` (live, hitung semua order), `close_daily_recap` (tutup buku, unique per tanggal). Batas hari = Asia/Jakarta.
   - `20260909120300_realtime.sql` — `pesanan` masuk publication realtime.
 - [x] RLS: anon hanya `SELECT` katalog (produk non-deleted); pesanan **tidak** ada INSERT langsung — lewat RPC `create_order` (lebih aman, harga dari server). Admin (authenticated) full akses.
-- [x] Seed `supabase/seed.sql` — 3 kategori (Matcha, Coffee, Non-Coffee), 10 produk.
+- [x] Seed `supabase/seed.sql` — menu Midori asli: 4 kategori (Matcha/Coffee/Es Series/Snack), 27 produk.
 - [x] Data access layer `src/services/supabase/`: `categories.ts`, `products.ts`, `orders.ts`, `recap.ts`, + `result.ts` (`Result<T>` = `{data,error}`, mapping error → pesan ID), barrel `index.ts`.
 - [x] Tipe `src/types/database.ts` (hand-written, siap diganti `supabase gen types`) + `src/types/index.ts` (alias domain).
 - [x] `npm run build` / `tsc --noEmit` hijau.

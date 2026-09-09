@@ -114,22 +114,22 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 4 — Kiosk: Keranjang & Checkout
+## Fase 4 — Kiosk: Keranjang & Checkout  ✅ SELESAI
 
 **Tujuan:** Pelanggan menyusun pesanan dan mengisi form checkout.
 
 **Tugas:**
-- Cart state (Context atau Zustand) terisolasi dari UI — logika di `src/lib/cart/`:
-  - add / remove / update qty, hitung subtotal & total.
-  - Unit test untuk kalkulasi cart (AGENTS.md Section 2 — logika billing testable).
-- Tombol +/- pada kartu produk & di dalam keranjang.
-- Drawer/halaman keranjang dengan ringkasan item + total.
-- Halaman checkout: form **Nama**, **Tipe Pesanan** (Dine-in/Takeaway), **Nomor Meja** (muncul jika Dine-in), **Metode Pembayaran** (Cash/QRIS).
-- Validasi form (nama wajib, nomor meja wajib jika dine-in).
+- [x] Cart logic murni di `src/lib/cart/` (`types.ts`, `reducer.ts` + selektor `selectSubtotal/selectItemCount/selectLineSubtotal/selectQuantityOf`) — tanpa React/IO, qty di-clamp 0..99 integer, qty 0 = hapus baris.
+- [x] `src/lib/cart/reducer.test.ts` (9 test) + `src/lib/checkout/validate.test.ts` (4 test) via `node:test`/`tsx` — `npm test` 13/13 hijau.
+- [x] `CartProvider` (Context + `useReducer`) + `useCart()`, sinkron ke `localStorage` (`midori-cart-v1`, hidrasi via effect agar tak mismatch SSR). Dipasang di `src/app/kiosk/layout.tsx`.
+- [x] Tombol +/-: `AddToCartControl` di kartu produk (tombol "Tambah" → `QuantityStepper`; "Sold Out" disabled) & `QuantityStepper` di halaman keranjang.
+- [x] `CartBar` (sticky footer di menu, muncul saat ada isi) → `/kiosk/cart`.
+- [x] `/kiosk/cart` (`CartView`): daftar item + qty + hapus + kosongkan, subtotal per baris, total, "Lanjut ke Checkout". Empty state.
+- [x] `/kiosk/checkout` (`CheckoutForm` + `OrderSummary`): **Nama**, **Tipe Pesanan** (segmented), **Nomor Meja** (muncul hanya jika Dine-in), **Metode Pembayaran** (Cash/QRIS). Validasi `src/lib/checkout/validate.ts` (mirror constraint DB), error tampil setelah submit, tombol disabled saat `submitting`. Cart kosong → redirect ke menu.
 
 **Deliverable:** Cart + form checkout siap submit.
 **Acuan PRD:** 2.1.A langkah 3–5, 2.2 Shopping Cart & Order Checkout.
-**DoD:** Total dihitung benar (unit test hijau), field kondisional meja bekerja, validasi mencegah submit tak lengkap.
+**DoD:** Total dihitung benar (unit test) ✅ · field meja kondisional ✅ · validasi mencegah submit tak lengkap ✅ · build (8 route) + tsc + lint hijau ✅. **Submit RPC + struk = Fase 5** (handler checkout saat ini stub: toast + `console.info`).
 
 ---
 

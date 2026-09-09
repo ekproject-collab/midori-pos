@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 
+import { AddToCartControl } from "@/components/cart/AddToCartControl";
 import { useCatalog } from "@/hooks/useCatalog";
 import { Button, EmptyState } from "@/components/ui";
 import { Skeleton } from "@/components/ui";
@@ -68,7 +69,11 @@ export function MenuBrowser() {
       ) : (
         <div className={GRID}>
           {products.map((product) => (
-            <ProductCard key={product.id_produk} product={product} />
+            <ProductCard
+              key={product.id_produk}
+              product={product}
+              action={<AddToCartControl product={product} />}
+            />
           ))}
         </div>
       )}

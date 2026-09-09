@@ -22,7 +22,11 @@ export function ProductCard({ product, action }: ProductCardProps) {
       )}
     >
       <div className="relative aspect-4/3">
-        <ProductImage src={product.gambar_url} alt={product.nama_produk} />
+        <ProductImage
+          src={product.gambar_url}
+          alt={product.nama_produk}
+          sizes="(min-width: 1024px) 22vw, (min-width: 640px) 30vw, 45vw"
+        />
         {soldOut && (
           <span className="absolute top-2 right-2">
             <Badge tone="danger">Sold Out</Badge>

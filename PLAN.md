@@ -197,21 +197,24 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 8 — Admin: Manajemen Produk & Kategori
+## Fase 8 — Admin: Manajemen Produk & Kategori  ✅ SELESAI (kode) / ⏳ (apply migrasi storage)
 
 **Tujuan:** Pemilik mengelola katalog sendiri.
 
 **Tugas:**
-- `app/admin/products/` — tabel produk: nama, kategori, harga, status.
-- CRUD Produk: create/edit (form: nama, kategori, deskripsi, harga, gambar), delete = **soft delete** (set `deleted_at = now()`) + konfirmasi. Semua query kiosk & list admin default filter `deleted_at is null`.
-- Toggle **Available / Sold Out** langsung dari list.
-- CRUD Kategori (sederhana: nama).
-- Upload gambar ke Supabase Storage, simpan `gambar_url`; validasi ukuran/tipe.
-- Guard: cegah hapus kategori yang masih punya produk.
+- [x] `src/app/admin/(dashboard)/products/page.tsx` + `ProductManager` — tabel produk (thumb, nama, kategori, harga, status) + `useAdminCatalog` hook (load kategori + produk admin, mutasi → refetch; toggle availability optimistic).
+- [x] CRUD Produk: `ProductFormModal` (nama, kategori, deskripsi, harga, gambar, is_available) — create + edit. Delete = **soft delete** (`softDeleteProduct`) + modal konfirmasi. Kiosk & list admin default sudah filter `deleted_at is null` (Fase 1).
+- [x] Toggle **Tersedia / Sold Out** — klik badge di tabel, optimistic + revert on error.
+- [x] CRUD Kategori: `CategoryPanel` — tambah, rename inline, hapus (disabled jika masih ada produk; FK error juga dipetakan di service).
+- [x] Upload gambar: `src/services/supabase/storage.ts` `uploadProductImage()` — validasi tipe (JPG/PNG/WebP) & ukuran (≤2 MB), path `products/<uuid>.<ext>`, return public URL. `deleteProductImage()` best-effort.
+- [x] `ProductImage` diganti ke `next/image` (`fill`) + `next.config.ts` `remotePatterns` untuk host Supabase Storage. `Textarea` ditambah ke `ui/`.
+- [x] Migrasi `20260909120500_storage_produk_images.sql` — bucket publik `produk-images` (2 MB, image mime) + policy (baca publik, tulis authenticated).
 
 **Deliverable:** Katalog dikelola penuh lewat dashboard.
-**Acuan PRD:** 2.1.B langkah 4, 2.2 Product Management.
-**DoD:** Tambah/edit/hapus produk & kategori tercermin di kiosk; toggle Sold Out langsung berpengaruh; upload gambar tampil.
+**Acuan PRD:** 2.1.B langkah 4, 2.2 Product Management, Section 3.
+**DoD:** build (`/admin/products` dynamic) + tsc + lint + 13 test hijau ✅ · CRUD + toggle + upload ⏳ **tes live** setelah migrasi storage di-apply.
+
+**Sisa aksi user:** SQL Editor → jalankan `supabase/migrations/20260909120500_storage_produk_images.sql` (atau paste ulang `_apply_all.generated.sql` bagian storage). Lalu tes CRUD + upload gambar di `/admin/products`, cek perubahan muncul di `/kiosk/menu`.
 
 ---
 

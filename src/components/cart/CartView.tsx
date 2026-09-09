@@ -37,7 +37,7 @@ export function CartView() {
       <ul className="divide-border border-border bg-surface divide-y rounded-md border">
         {items.map((item) => (
           <li key={item.id_produk} className="flex gap-3 p-3">
-            <div className="border-border h-16 w-16 shrink-0 overflow-hidden rounded-sm border">
+            <div className="border-border relative h-16 w-16 shrink-0 overflow-hidden rounded-sm border">
               <ProductImage src={item.gambar_url} alt={item.nama_produk} />
             </div>
 

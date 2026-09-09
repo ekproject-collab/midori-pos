@@ -1,26 +1,31 @@
+import Image from "next/image";
+
 import { cn } from "@/lib/cn";
 
 /**
- * Product thumbnail with a branded fallback. Uses a plain <img> for now —
- * real uploads land in Phase 8, where next/image + Supabase Storage remote
- * patterns get configured.
+ * Product thumbnail with a branded fallback. Renders `next/image` with `fill`,
+ * so the parent must be positioned and sized (all call sites use a fixed box
+ * or an aspect-ratio container).
  */
 export function ProductImage({
   src,
   alt,
   className,
+  sizes = "128px",
 }: {
   src: string | null;
   alt: string;
   className?: string;
+  sizes?: string;
 }) {
   if (src) {
     return (
-      // eslint-disable-next-line @next/next/no-img-element
-      <img
+      <Image
         src={src}
         alt={alt}
-        className={cn("h-full w-full object-cover", className)}
+        fill
+        sizes={sizes}
+        className={cn("object-cover", className)}
       />
     );
   }

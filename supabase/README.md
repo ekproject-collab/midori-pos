@@ -11,6 +11,8 @@ follow [../PRD.md](../PRD.md) Section 3 verbatim.
 | `migrations/20260909120100_rls_policies.sql` | Row Level Security (anon reads catalog; authenticated = admin, full access) |
 | `migrations/20260909120200_rpc_functions.sql` | `create_order`, `get_daily_sales`, `close_daily_recap` |
 | `migrations/20260909120300_realtime.sql` | Adds `pesanan` to the `supabase_realtime` publication |
+| `migrations/20260909120400_fix_function_grants.sql` | Revokes admin RPC EXECUTE from `anon` |
+| `migrations/20260909120500_storage_produk_images.sql` | Public `produk-images` Storage bucket + policies (Phase 8 image uploads) |
 | `seed.sql` | Full Midori catalog (4 categories, 27 products). Re-runnable — wipes catalog + orders first. |
 | `_apply_all.generated.sql` | All migrations concatenated — for the one-paste path below. Regenerate with `npm run db:build`. |
 

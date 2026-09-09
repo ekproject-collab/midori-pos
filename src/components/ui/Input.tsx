@@ -1,6 +1,7 @@
 import type {
   InputHTMLAttributes,
   SelectHTMLAttributes,
+  TextareaHTMLAttributes,
   ReactNode,
 } from "react";
 
@@ -68,6 +69,20 @@ export interface SelectProps extends SelectHTMLAttributes<HTMLSelectElement> {
 export function Select({ invalid, className, ...props }: SelectProps) {
   return (
     <select
+      className={cn(fieldBase, invalid && "border-danger-700", className)}
+      aria-invalid={invalid || undefined}
+      {...props}
+    />
+  );
+}
+
+export interface TextareaProps extends TextareaHTMLAttributes<HTMLTextAreaElement> {
+  invalid?: boolean;
+}
+
+export function Textarea({ invalid, className, ...props }: TextareaProps) {
+  return (
+    <textarea
       className={cn(fieldBase, invalid && "border-danger-700", className)}
       aria-invalid={invalid || undefined}
       {...props}

@@ -10,4 +10,5 @@ export * from "./categories";
 export * from "./products";
 export * from "./orders";
 export * from "./recap";
+export * from "./storage";
 export { checkSupabaseConnection } from "./health";

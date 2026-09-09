@@ -29,6 +29,14 @@ export const env = {
       process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY,
     );
   },
+  /**
+   * Optional server-only allowlist. When set, only this email may access
+   * `/admin` — a belt-and-suspenders guard on top of disabling Supabase
+   * sign-ups. Empty string = allow any authenticated user.
+   */
+  get adminEmail(): string {
+    return process.env.ADMIN_EMAIL?.trim() ?? "";
+  },
 };
 
 /** True when both Supabase variables are present (no throw). */

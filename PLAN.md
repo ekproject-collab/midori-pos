@@ -154,20 +154,27 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 6 — Admin: Autentikasi
+## Fase 6 — Admin: Autentikasi  ✅ SELESAI (kode) / ⏳ (buat akun admin di Supabase)
 
 **Tujuan:** Dashboard `/admin` hanya untuk pemilik.
 
 **Tugas:**
-- Supabase Auth email+password; buat 1 akun admin manual.
-- Halaman `/admin/login`.
-- Middleware Next.js proteksi semua route `/admin/*`, redirect ke login bila belum auth.
-- Helper session server & client, tombol logout.
-- (Opsional) batasi ke satu email admin lewat cek di middleware.
+- [x] `@supabase/ssr` — session di cookie. `src/services/supabase/`: `server.ts` (`getSupabaseServerClient()` per-request, `getAll`/`setAll`), `client.ts` diganti ke `createBrowserClient`, `auth.ts` (`getAdminUser()` cache-wrapped + allowlist `ADMIN_EMAIL`), `auth-actions.ts` (`"use server"`: `signInAdmin`, `signOutAdmin`).
+- [x] `src/app/admin/login/page.tsx` — form `useActionState`, di luar route group terproteksi.
+- [x] `src/proxy.ts` (Next 16: `middleware` → **`proxy`**) — matcher `/admin/:path*`, refresh session, unauth → `/admin/login`, sudah-auth di `/admin/login` → `/admin`.
+- [x] `src/app/admin/(dashboard)/layout.tsx` — gate server-side `getAdminUser()` (defense in depth + allowlist), render `AdminShell`. Halaman dashboard pindah ke `(dashboard)/page.tsx`.
+- [x] `AdminShell` — tombol "Keluar" (form → `signOutAdmin`), tampil email admin, nav sidebar.
+- [x] Allowlist opsional: env `ADMIN_EMAIL` (server-only) — kosong = semua user Supabase boleh.
 
 **Deliverable:** Gate autentikasi berfungsi.
 **Acuan PRD:** 2.1.B langkah 1, 1.1 (single admin).
-**DoD:** Akses `/admin` tanpa login → redirect; login benar → masuk; logout → sesi bersih.
+**DoD:** `/admin` & `/admin/orders` tanpa login → 307 ke `/admin/login` ✅ (dites curl) · `/kiosk` tak terpengaruh ✅ · build (proxy terdaftar, `/admin` dynamic) + tsc + lint + 13 test hijau ✅ · login benar → masuk / logout → sesi bersih ⏳ (butuh akun admin).
+
+**Sisa aksi user:**
+1. Supabase Dashboard → **Authentication → Users → Add user** → isi email + password, centang **Auto Confirm User**.
+2. (Disarankan) Authentication → **Providers/Sign In → matikan "Allow new users to sign up"** supaya benar-benar single admin.
+3. (Opsional) set `ADMIN_EMAIL=` di `.env.local` ke email admin itu.
+4. `npm run dev` → `/admin` → login → cek masuk & tombol Keluar.
 
 ---
 

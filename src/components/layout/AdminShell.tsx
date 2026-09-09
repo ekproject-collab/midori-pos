@@ -4,9 +4,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { signOutAdmin } from "@/services/supabase/auth-actions";
 import { cn } from "@/lib/cn";
 
 const NAV = [
+  { href: "/admin", label: "Dashboard", exact: true },
   { href: "/admin/orders", label: "Order Queue" },
   { href: "/admin/products", label: "Produk & Kategori" },
   { href: "/admin/reports", label: "Laporan / Close Order" },
@@ -14,12 +16,12 @@ const NAV = [
 
 export interface AdminShellProps {
   children: ReactNode;
-  title: string;
-  actions?: ReactNode;
+  /** Shown in the header bar and page context. */
+  adminEmail?: string;
 }
 
 /** Desktop dashboard shell: fixed sidebar + scrollable content. */
-export function AdminShell({ children, title, actions }: AdminShellProps) {
+export function AdminShell({ children, adminEmail }: AdminShellProps) {
   const pathname = usePathname();
 
   return (
@@ -33,8 +35,9 @@ export function AdminShell({ children, title, actions }: AdminShellProps) {
         </div>
         <nav className="flex flex-col gap-1">
           {NAV.map((item) => {
-            const active =
-              pathname === item.href || pathname.startsWith(`${item.href}/`);
+            const active = item.exact
+              ? pathname === item.href
+              : pathname === item.href || pathname.startsWith(`${item.href}/`);
             return (
               <Link
                 key={item.href}
@@ -54,9 +57,19 @@ export function AdminShell({ children, title, actions }: AdminShellProps) {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="border-border bg-surface flex items-center justify-between gap-3 border-b px-6 py-4">
-          <h1 className="text-lg font-bold">{title}</h1>
-          {actions}
+        <header className="border-border bg-surface flex items-center justify-between gap-3 border-b px-6 py-3">
+          <span className="text-muted text-sm md:hidden">Midori Admin</span>
+          <span className="text-muted hidden text-sm md:inline">
+            {adminEmail}
+          </span>
+          <form action={signOutAdmin}>
+            <button
+              type="submit"
+              className="border-border text-ink-700 hover:bg-cream-100 rounded-md border px-3 py-1.5 text-sm font-semibold"
+            >
+              Keluar
+            </button>
+          </form>
         </header>
         <main className="flex-1 p-6">{children}</main>
       </div>

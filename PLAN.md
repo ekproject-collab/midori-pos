@@ -218,23 +218,21 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 9 — Admin: Close Order & Rekap Harian
+## Fase 9 — Admin: Close Order & Rekap Harian  ✅ SELESAI
 
 **Tujuan:** Tutup buku harian yang mengunci & menyimpan ringkasan penjualan.
 
 **Tugas:**
-- `app/admin/reports/page.tsx` — rekap hari berjalan (live):
-  - total transaksi, pendapatan Cash, pendapatan QRIS, total keseluruhan.
-  - Hitung dari **semua** `pesanan` pada tanggal itu (tanpa filter `status_pesanan` / `status_pembayaran`). Breakdown Cash vs QRIS berdasar `metode_pembayaran`.
-- Tombol **"Tutup Buku Hari Ini"**:
-  - Postgres function menghitung agregat & insert ke `rekap_harian` (`tanggal`, `total_transaksi`, `total_pendapatan_cash`, `total_pendapatan_qris`, `total_pendapatan_keseluruhan`, `waktu_tutup`).
-  - Cegah double close untuk tanggal sama (unique pada `tanggal` + konfirmasi UI).
-- Riwayat rekap: tabel `rekap_harian` terurut tanggal, dengan detail per hari.
-- (Opsional) export CSV.
+- [x] `src/app/admin/(dashboard)/reports/page.tsx` + `ReportsView` + `useReports` hook.
+- [x] Rekap live hari ini via RPC `get_daily_sales` (Fase 1) — 4 stat card: Total Transaksi, Pendapatan Cash, Pendapatan QRIS, Total Pendapatan. Hitung **semua** pesanan tanggal itu (keputusan owner), breakdown by `metode_pembayaran`. Batas hari Asia/Jakarta.
+- [x] Tombol **"Tutup Buku Hari Ini"** → modal konfirmasi (tampil angka) → RPC `close_daily_recap` → insert `rekap_harian`. Disabled kalau 0 transaksi. Setelah tutup: badge "Sudah ditutup", tombol hilang, note bahwa angka live bisa beda dari yang tersimpan.
+- [x] Cegah double close: unique `tanggal` di DB → RPC raise, service map ke pesan, UI toast. `sudah_ditutup` flag dari `get_daily_sales`.
+- [x] Riwayat: tabel `rekap_harian` terurut tanggal desc (tanggal, transaksi, cash, qris, total, jam tutup).
+- [x] Export CSV riwayat (client-side Blob download).
 
 **Deliverable:** Fitur tutup buku + arsip laporan harian.
 **Acuan PRD:** 1 (ringkasan), 2.1.B langkah 5–6, 2.2 Close Order & Recap, Section 3 tabel `rekap_harian`.
-**DoD:** Angka rekap live cocok dengan data pesanan; klik tutup buku menyimpan 1 baris `rekap_harian` yang benar; tidak bisa close dua kali; riwayat tampil.
+**DoD:** build (`/admin/reports` dynamic) + tsc + lint + 13 test hijau ✅ · rekap live + tutup buku + anti double-close + riwayat ⏳ **tes live** (login admin → `/admin/reports`).
 
 ---
 

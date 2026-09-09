@@ -6,10 +6,10 @@ import { useToast } from "@/components/ui";
 import {
   getOrder,
   listOrdersForDay,
+  subscribeToOrderChanges,
   updateOrderStatus,
   updatePaymentStatus,
 } from "@/services/supabase";
-import { getSupabaseClient } from "@/services/supabase/client";
 import type {
   Pesanan,
   PesananWithDetail,
@@ -109,54 +109,20 @@ export function useOrderQueue() {
 
   // realtime subscription
   useEffect(() => {
-    const supabase = getSupabaseClient();
-    let cancelled = false;
-
-    const setup = async () => {
-      const {
-        data: { session },
-      } = await supabase.auth.getSession();
-      if (session) await supabase.realtime.setAuth(session.access_token);
-      if (cancelled) return;
-
-      const channel = supabase
-        .channel("admin-order-queue")
-        .on(
-          "postgres_changes",
-          { event: "INSERT", schema: "public", table: "pesanan" },
-          async (payload) => {
-            const row = payload.new as Pesanan;
-            const full = await getOrder(row.id_pesanan);
-            if (full.error !== null) return;
-            setState((s) => {
-              if (s.orders.some((o) => o.id_pesanan === row.id_pesanan)) {
-                return s;
-              }
-              return { ...s, orders: sortByTime([...s.orders, full.data]) };
-            });
-            markNew(row.id_pesanan);
-          },
-        )
-        .on(
-          "postgres_changes",
-          { event: "UPDATE", schema: "public", table: "pesanan" },
-          (payload) => {
-            const row = payload.new as Pesanan;
-            setState((s) => ({ ...s, orders: mergeRow(s.orders, row) }));
-          },
-        )
-        .subscribe();
-
-      return channel;
-    };
-
-    const channelPromise = setup();
-    return () => {
-      cancelled = true;
-      channelPromise.then((channel) => {
-        if (channel) supabase.removeChannel(channel);
-      });
-    };
+    return subscribeToOrderChanges({
+      onInsert: async (row) => {
+        const full = await getOrder(row.id_pesanan);
+        if (full.error !== null) return;
+        setState((s) => {
+          if (s.orders.some((o) => o.id_pesanan === row.id_pesanan)) return s;
+          return { ...s, orders: sortByTime([...s.orders, full.data]) };
+        });
+        markNew(row.id_pesanan);
+      },
+      onUpdate: (row) => {
+        setState((s) => ({ ...s, orders: mergeRow(s.orders, row) }));
+      },
+    });
   }, [markNew]);
 
   // clear all pending highlight timers on unmount

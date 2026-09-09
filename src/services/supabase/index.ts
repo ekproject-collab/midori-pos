@@ -9,6 +9,7 @@ export type { TypedSupabaseClient } from "./client";
 export * from "./categories";
 export * from "./products";
 export * from "./orders";
+export * from "./realtime";
 export * from "./recap";
 export * from "./storage";
 export { checkSupabaseConnection } from "./health";

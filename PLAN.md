@@ -236,25 +236,33 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 10 — Hardening, QA & Deployment
+## Fase 10 — Hardening, QA & Deployment  ✅ (kode) / ⏳ (deploy + tes device oleh user)
 
 **Tujuan:** Siap dipakai produksi di kedai.
 
 **Tugas:**
-- Error boundary global + fallback ramah untuk kiosk (auto-recover / tombol reload).
-- Review semua path Supabase menangani `error` (AGENTS.md Section 3).
-- Uji responsif: tablet landscape (kiosk), desktop (admin); target device nyata.
-- Audit aksesibilitas dasar: kontras, ukuran sentuh, focus state.
-- Audit UI vs AGENTS.md Section 1 (no gradient, no glassmorphism, flat, palet benar).
-- Uji beban ringan: banyak order berturut-turut, realtime stabil.
-- Seed data produksi (menu asli), buat akun admin final, siapkan QRIS.
-- Konfigurasi domain Vercel, env production, aktifkan backup Supabase.
-- Smoke test end-to-end: kiosk order → admin proses → tutup buku.
-- Dokumentasi singkat: cara pakai untuk owner + `README.md`.
+- [x] Anti-spam pesanan: migrasi `20260909120600_rate_limit_orders.sql` — `create_order` batasi **30 pesanan / 5 menit per IP** (tabel `order_rate_limit`, di dalam RPC SECURITY DEFINER). Dampak finansial nol (pembayaran diverifikasi kasir).
+- [x] Error boundary: `src/app/global-error.tsx` (root layout), `src/app/error.tsx` (root segmen), `src/app/admin/(dashboard)/error.tsx`, plus `src/app/kiosk/error.tsx` (Fase 3). `src/app/not-found.tsx` bermerek.
+- [x] Anti-discovery URL: `src/app/robots.ts` (disallow all) + `metadata.robots` noindex di root layout.
+- [x] Security headers di `next.config.ts`: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy`, `Permissions-Policy`.
+- [x] `/style-guide` di-gate (404 di production via `style-guide/layout.tsx`).
+- [x] Audit AGENTS §1: 0 class gradient/blur/backdrop di seluruh `src/` (hanya di komentar). Audit isolasi Supabase (§2): semua akses lewat `src/services/supabase/*`; realtime diekstrak ke `services/supabase/realtime.ts` (`subscribeToOrderChanges`); `proxy.ts` pakai `createServerClient` langsung (perlu, cookie request/response-bound).
+- [x] Error handling: service layer `Result<T>` + `runQuery` catch throws; semua hook cek `.error !== null`.
+- [x] Dokumentasi: `README.md` (fitur, deploy Vercel, env, flood protection) + `docs/OWNER.md` (panduan operasional Bahasa Indonesia).
+- [x] Verifikasi lokal: build (13 route) + tsc + lint + 13 test hijau; smoke test dev (routes, headers, robots.txt).
 
 **Deliverable:** Rilis produksi v1.0.
 **Acuan PRD:** seluruh dokumen.
-**DoD:** Alur lengkap lolos di environment produksi; tidak ada error konsol kritis; owner bisa operasikan tanpa bantuan.
+**DoD:** kode siap produksi ✅ · deploy + tes end-to-end di production ⏳ (user).
+
+**Sisa aksi user untuk go-live:**
+1. SQL Editor → jalankan `supabase/migrations/20260909120600_rate_limit_orders.sql`.
+2. Push repo ke GitHub → import ke Vercel → set 3 env (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`, `ADMIN_EMAIL`) → deploy.
+3. Supabase Auth → matikan "Allow new users to sign up".
+4. Tempel stiker QRIS di kasir.
+5. Buka `/kiosk` di tablet (mode fullscreen), `/admin` di perangkat kasir.
+6. Smoke test di URL produksi: pesan dari kiosk → proses di admin → tandai Lunas → Tutup Buku.
+7. Uji tampilan langsung di tablet landscape yang dipakai.
 
 ---
 

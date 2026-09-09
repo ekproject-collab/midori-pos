@@ -13,6 +13,7 @@ export const metadata: Metadata = {
   title: "Midori POS — Matcha & Coffee Kiosk",
   description:
     "Self-ordering kiosk POS for a matcha & coffee shop, with a single-admin dashboard.",
+  robots: { index: false, follow: false },
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {

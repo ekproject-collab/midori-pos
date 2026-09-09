@@ -57,7 +57,7 @@ export function AdminShell({ children, adminEmail }: AdminShellProps) {
       </aside>
 
       <div className="flex min-w-0 flex-1 flex-col">
-        <header className="border-border bg-surface flex items-center justify-between gap-3 border-b px-6 py-3">
+        <header className="border-border bg-surface sticky top-0 z-20 flex items-center justify-between gap-3 border-b px-6 py-3">
           <span className="text-muted text-sm md:hidden">Midori Admin</span>
           <span className="text-muted hidden text-sm md:inline">
             {adminEmail}

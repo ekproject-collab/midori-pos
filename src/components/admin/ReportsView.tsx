@@ -4,7 +4,6 @@ import { useState } from "react";
 
 import { useReports } from "@/hooks/useReports";
 import { Badge, Button, EmptyState, Modal, Skeleton } from "@/components/ui";
-import { cn } from "@/lib/cn";
 import {
   formatJakartaDate,
   formatJakartaTime,
@@ -13,31 +12,7 @@ import {
 } from "@/lib/format";
 import type { RekapHarian } from "@/types";
 
-function Stat({
-  label,
-  value,
-  accent,
-}: {
-  label: string;
-  value: string;
-  accent?: boolean;
-}) {
-  return (
-    <div className="border-border bg-surface rounded-md border p-4">
-      <p className="text-muted text-xs font-semibold tracking-wide uppercase">
-        {label}
-      </p>
-      <p
-        className={cn(
-          "mt-1 text-2xl font-bold tabular-nums",
-          accent && "text-matcha-800",
-        )}
-      >
-        {value}
-      </p>
-    </div>
-  );
-}
+import { StatTile } from "./StatTile";
 
 function downloadCsv(rows: RekapHarian[]) {
   const header = [
@@ -113,16 +88,19 @@ export function ReportsView() {
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
-          <Stat label="Total Transaksi" value={String(today.total_transaksi)} />
-          <Stat
+          <StatTile
+            label="Total Transaksi"
+            value={String(today.total_transaksi)}
+          />
+          <StatTile
             label="Pendapatan Cash"
             value={formatRupiah(today.total_pendapatan_cash)}
           />
-          <Stat
+          <StatTile
             label="Pendapatan QRIS"
             value={formatRupiah(today.total_pendapatan_qris)}
           />
-          <Stat
+          <StatTile
             label="Total Pendapatan"
             value={formatRupiah(today.total_pendapatan_keseluruhan)}
             accent

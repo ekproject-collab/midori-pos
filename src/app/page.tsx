@@ -1,36 +1,43 @@
 import Link from "next/link";
 
+import { Card } from "@/components/ui";
+
 export default function RootPage() {
   return (
     <main className="mx-auto flex max-w-2xl flex-1 flex-col justify-center gap-8 p-8">
       <header className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">Midori POS</h1>
-        <p className="text-stone-600">
-          Sistem POS kiosk self-ordering untuk kedai matcha &amp; coffee. Fase 0
-          — fondasi project.
+        <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight">
+          <span aria-hidden>茶</span> Midori POS
+        </h1>
+        <p className="text-muted">
+          Sistem POS kiosk self-ordering untuk kedai matcha &amp; coffee.
         </p>
       </header>
 
       <nav className="grid gap-3 sm:grid-cols-2">
-        <Link
-          href="/kiosk"
-          className="border border-stone-300 bg-white p-5 transition-colors hover:border-stone-900"
-        >
-          <span className="block text-lg font-semibold">Kiosk</span>
-          <span className="text-sm text-stone-600">
-            Antarmuka pemesanan mandiri (tablet)
-          </span>
+        <Link href="/kiosk">
+          <Card raised className="hover:bg-cream-100 p-5 transition-colors">
+            <span className="block text-lg font-semibold">Kiosk</span>
+            <span className="text-muted text-sm">
+              Antarmuka pemesanan mandiri (tablet)
+            </span>
+          </Card>
         </Link>
-        <Link
-          href="/admin"
-          className="border border-stone-300 bg-white p-5 transition-colors hover:border-stone-900"
-        >
-          <span className="block text-lg font-semibold">Admin</span>
-          <span className="text-sm text-stone-600">
-            Dashboard pemilik (desktop)
-          </span>
+        <Link href="/admin">
+          <Card raised className="hover:bg-cream-100 p-5 transition-colors">
+            <span className="block text-lg font-semibold">Admin</span>
+            <span className="text-muted text-sm">
+              Dashboard pemilik (desktop)
+            </span>
+          </Card>
         </Link>
       </nav>
+
+      <p className="text-muted text-xs">
+        <Link href="/style-guide" className="underline">
+          Style guide
+        </Link>
+      </p>
     </main>
   );
 }

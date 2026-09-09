@@ -1,29 +1,102 @@
 @import "tailwindcss";
 
-/*
- * Phase 0: minimal base only.
- * The full Matcha & Coffee design system (palette, typography, tokens) is
- * built in Phase 2 — see PLAN.md.
- */
+/* =============================================================================
+ * Midori POS — Design System (Phase 2)
+ * Flat, grounded, anti-"AI web app". Rules (AGENTS.md Section 1):
+ *   - NO glassmorphism / backdrop-blur / translucent panels
+ *   - NO gradients — solid flat colours only
+ *   - Earthy matcha greens + coffee browns + warm off-white
+ *   - Solid borders and hard (blur-less) shadows, never soft diffuse drop shadows
+ *   - Clean sans-serif, high contrast for kiosk readability
+ * ===========================================================================*/
 
-:root {
-  --background: #faf8f5; /* off-white, per AGENTS.md */
-  --foreground: #1c1917; /* neutral dark text */
+@theme {
+  /* ---- Brand: Matcha (earthy green) ------------------------------------- */
+  --color-matcha-50: #f2f5ec;
+  --color-matcha-100: #e2ead2;
+  --color-matcha-200: #c7d5a9;
+  --color-matcha-300: #a6bd7c;
+  --color-matcha-400: #869f57;
+  --color-matcha-500: #6b8342;
+  --color-matcha-600: #536833;
+  --color-matcha-700: #3f4f28;
+  --color-matcha-800: #333f22;
+  --color-matcha-900: #2b351e;
+
+  /* ---- Brand: Coffee (deep brown) ------------------------------------- */
+  --color-coffee-50: #f7f2ec;
+  --color-coffee-100: #e9dccb;
+  --color-coffee-200: #d4bd9e;
+  --color-coffee-300: #bd9a71;
+  --color-coffee-400: #a37c4f;
+  --color-coffee-500: #83603b;
+  --color-coffee-600: #684a2d;
+  --color-coffee-700: #4f3823;
+  --color-coffee-800: #3c2b1c;
+  --color-coffee-900: #2e2116;
+
+  /* ---- Warm neutrals ------------------------------------------------- */
+  --color-cream-50: #faf8f5; /* app background, per AGENTS.md */
+  --color-cream-100: #f4f0e8;
+  --color-cream-200: #e8e1d3;
+  --color-cream-300: #d8cdb9;
+  --color-ink-500: #6f6a61; /* muted text */
+  --color-ink-700: #403c34;
+  --color-ink-900: #1c1917; /* primary text */
+
+  /* ---- Status (muted, flat) ---------------------------------------- */
+  --color-success-100: #dce9d0;
+  --color-success-700: #3f5f2c;
+  --color-warning-100: #f3e4c4;
+  --color-warning-700: #8a5a1c;
+  --color-danger-100: #efd4cd;
+  --color-danger-700: #8a3324;
+  --color-info-100: #d7e2e6;
+  --color-info-700: #395863;
+
+  /* ---- Semantic aliases ------------------------------------------- */
+  --color-background: var(--color-cream-50);
+  --color-surface: #ffffff;
+  --color-border: var(--color-cream-300);
+  --color-foreground: var(--color-ink-900);
+  --color-muted: var(--color-ink-500);
+  --color-primary: var(--color-matcha-600);
+  --color-primary-hover: var(--color-matcha-700);
+
+  /* ---- Type ----------------------------------------------------- */
+  --font-sans:
+    var(--font-geist-sans), ui-sans-serif, system-ui, -apple-system, "Segoe UI",
+    Roboto, sans-serif;
+
+  /* ---- Radius: small, not pill-shaped -------------------------- */
+  --radius-sm: 0.125rem;
+  --radius-md: 0.25rem;
+  --radius-lg: 0.375rem;
+
+  /* ---- Hard shadows (offset, zero blur) ---------------------- */
+  --shadow-hard-sm: 2px 2px 0 0 var(--color-ink-900);
+  --shadow-hard: 4px 4px 0 0 var(--color-ink-900);
+  --shadow-hard-primary: 4px 4px 0 0 var(--color-matcha-700);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+html {
+  color-scheme: light;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family:
-    var(--font-sans),
-    system-ui,
-    -apple-system,
-    sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-sans);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Kiosk screens bump the base size for arm's-length tablet readability. */
+.kiosk-root {
+  font-size: 1.0625rem;
+}
+
+/* Consistent focus ring across the app. */
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-matcha-600);
+  outline-offset: 2px;
 }

@@ -46,7 +46,11 @@ check(
 const target = (prods.data ?? [])[0];
 const wInsert = await supabase
   .from("produk")
-  .insert({ id_kategori: target?.id_kategori ?? 1, nama_produk: "HACK", harga: 1 })
+  .insert({
+    id_kategori: target?.id_kategori ?? 1,
+    nama_produk: "HACK",
+    harga: 1,
+  })
   .select();
 check(
   "anon CANNOT insert produk",

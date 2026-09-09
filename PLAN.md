@@ -79,22 +79,20 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 2 — Design System (Flat / Anti-AI)
+## Fase 2 — Design System (Flat / Anti-AI)  ✅ SELESAI
 
 **Tujuan:** Bahasa visual konsisten sebelum bikin halaman, sesuai AGENTS.md Section 1.
 
 **Tugas:**
-- Definisikan token di `tailwind.config`:
-  - Palet: hijau matcha earthy, coklat kopi, off-white `#FAF8F5`, teks netral gelap.
-  - Tanpa gradient, tanpa glassmorphism. Border solid (`border-gray-200`), shadow keras/brutalist opsional.
-- Font sistem sans-serif, skala tipografi kontras tinggi untuk kiosk.
-- Komponen dasar reusable (`src/components/ui/`): `Button`, `Card`, `Badge`, `QuantityStepper`, `Modal`, `Input`, `Select`, `EmptyState`, `Toast`.
-- Layout shell: `KioskLayout` (landscape tablet), `AdminLayout` (desktop, sidebar).
-- Halaman style guide internal (`/style-guide`) untuk review visual.
+- [x] Token di `src/app/globals.css` via `@theme` (Tailwind v4, CSS-based): palet `matcha-*` (earthy green), `coffee-*` (deep brown), `cream-*` (off-white `#FAF8F5`), `ink-*` (teks), status `success/warning/danger/info`, alias semantik (`background/surface/border/foreground/muted/primary`), `--shadow-hard*` (offset, 0 blur), radius kecil. Tanpa gradient, tanpa glassmorphism.
+- [x] Font: Geist Sans (via `next/font`), `.kiosk-root` menaikkan base size untuk keterbacaan tablet; focus ring global.
+- [x] Komponen `src/components/ui/`: `Button` (4 varian × 3 size), `Card`/`CardHeader`/`CardBody`, `Badge` (6 tone), `QuantityStepper`, `Field`/`Input`/`Select`, `Modal` (scrim solid, no blur), `EmptyState`, `Spinner`/`Skeleton`, `Toast` (`ToastProvider` + `useToast`). Barrel `index.ts`. Helper `src/lib/cn.ts`, `src/lib/format.ts` (`formatRupiah`, dll).
+- [x] Layout shell: `src/components/layout/KioskShell.tsx` (landscape tablet, header + sticky footer slot), `AdminShell.tsx` (sidebar nav + active link, desktop).
+- [x] `src/app/style-guide/page.tsx` — showcase semua token & komponen. Placeholder `/`, `/kiosk`, `/admin` dipindah ke shell + token baru.
 
 **Deliverable:** Config Tailwind + library komponen + style guide.
 **Acuan PRD:** 1.2; AGENTS.md Section 1 & 4.
-**DoD:** Semua komponen dasar tampil di `/style-guide`, lolos cek "no gradient / no blur", terbaca di layar tablet.
+**DoD:** Komponen tampil di `/style-guide` ✅ · `npm run build` (5 route) + `tsc` + `lint` hijau ✅ · cek "no gradient / no glassmorphism": 0 class gradient/blur/backdrop di HTML ter-render `/`, `/kiosk`, `/admin`, `/style-guide` ✅.
 
 ---
 

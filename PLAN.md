@@ -28,26 +28,30 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 0 — Fondasi & Infrastruktur
+## Fase 0 — Fondasi & Infrastruktur  ✅ (kode) / ⏳ (aksi eksternal)
 
 **Tujuan:** Kerangka project jalan lokal & terhubung ke Supabase, deploy pipeline siap.
 
 **Tugas:**
-- `git init`, buat repo, `.gitignore`, push ke GitHub.
-- Scaffold Next.js (App Router, TypeScript) + Tailwind CSS.
-- Struktur folder sesuai AGENTS.md:
-  - `app/kiosk/`, `app/admin/`
-  - `src/services/supabase/` (data access layer)
-  - `src/lib/`, `src/components/`, `src/hooks/`
-- Buat project Supabase (Free Tier), simpan URL & anon key.
-- Setup env: `.env.local` + `.env.example` (`NEXT_PUBLIC_SUPABASE_URL`, `NEXT_PUBLIC_SUPABASE_ANON_KEY`).
-- Inisialisasi Supabase client tunggal di `src/services/supabase/client.ts`.
-- Hubungkan repo ke Vercel, set env vars di Vercel, deploy pertama (halaman kosong).
-- Konfigurasi ESLint + Prettier, path alias `@/*`.
+- [x] `git init`, `.gitignore` (branch `main`, commit awal `d9c1ccc`). Push ke GitHub → **user**.
+- [x] Scaffold Next.js 16 (App Router, TS, Turbopack) + Tailwind v4.
+- [x] Struktur folder: `src/app/{kiosk,admin}`, `src/services/supabase/`, `src/lib/`, `src/components/ui/`, `src/hooks/`, `src/types/`.
+- [ ] Buat project Supabase (Free Tier), simpan URL & anon key → **user**.
+- [x] Env: `.env.local` (kosong) + `.env.example`; `.env.example` di-whitelist di `.gitignore`.
+- [x] Supabase client tunggal `src/services/supabase/client.ts` (`getSupabaseClient()`, lazy + memoised) + `src/lib/env.ts` (validasi lazy, `hasSupabaseEnv()`).
+- [ ] Hubungkan repo ke Vercel, set env vars, deploy pertama → **user**.
+- [x] ESLint (bawaan Next) + Prettier + `prettier-plugin-tailwindcss`, alias `@/*`, script `format` / `format:check`.
 
 **Deliverable:** Repo + deployment Vercel hidup, koneksi Supabase terverifikasi.
 **Acuan PRD:** 1.2 Tech Stack & Arsitektur.
-**DoD:** `npm run dev` jalan tanpa error; halaman placeholder tampil di URL Vercel; client Supabase bisa fetch dummy.
+**DoD:** `npm run dev` jalan tanpa error ✅ · `npm run build` sukses ✅ (`/`, `/kiosk`, `/admin` prerender static) · halaman tampil di URL Vercel ⏳ (butuh deploy user) · client Supabase fetch dummy ⏳ (health check siap, butuh env vars).
+
+**Sisa aksi user sebelum Fase 1:**
+1. Buat project Supabase, isi `NEXT_PUBLIC_SUPABASE_URL` & `NEXT_PUBLIC_SUPABASE_ANON_KEY` di `.env.local`.
+2. Buat repo GitHub, `git remote add origin …`, `git push -u origin main`.
+3. Import repo ke Vercel, set 2 env vars yang sama, deploy.
+
+**Catatan:** `next dev` otomatis menambah blok `<!-- BEGIN:nextjs-agent-rules -->` di `AGENTS.md` (fitur Next 16). Di-commit apa adanya; nonaktifkan dengan `agentRules: false` di `next.config.ts` bila tidak diinginkan.
 
 ---
 

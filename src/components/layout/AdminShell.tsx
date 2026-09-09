@@ -26,7 +26,7 @@ export function AdminShell({ children, adminEmail }: AdminShellProps) {
 
   return (
     <div className="bg-background flex min-h-dvh">
-      <aside className="border-border bg-surface hidden w-60 shrink-0 flex-col border-r p-4 md:flex">
+      <aside className="border-border bg-surface sticky top-0 hidden h-dvh w-60 shrink-0 flex-col self-start overflow-y-auto border-r p-4 md:flex">
         <div className="mb-6 flex items-center gap-2 px-2">
           <span className="text-xl leading-none" aria-hidden>
             茶

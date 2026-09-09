@@ -27,6 +27,19 @@ const sizes: Record<Size, string> = {
   lg: "px-6 py-3 text-base",
 };
 
+/** Shared class string — use for links that should look like a button. */
+export function buttonClass(
+  opts: {
+    variant?: Variant;
+    size?: Size;
+    block?: boolean;
+    className?: string;
+  } = {},
+) {
+  const { variant = "primary", size = "md", block = false, className } = opts;
+  return cn(base, variants[variant], sizes[size], block && "w-full", className);
+}
+
 export function Button({
   variant = "primary",
   size = "md",
@@ -38,13 +51,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={cn(
-        base,
-        variants[variant],
-        sizes[size],
-        block && "w-full",
-        className,
-      )}
+      className={buttonClass({ variant, size, block, className })}
       {...props}
     />
   );

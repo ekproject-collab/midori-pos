@@ -96,21 +96,21 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 3 — Kiosk: Katalog Menu
+## Fase 3 — Kiosk: Katalog Menu  ✅ SELESAI
 
 **Tujuan:** Pelanggan bisa menjelajah menu per kategori.
 
 **Tugas:**
-- `app/kiosk/page.tsx` — Home dengan tombol "Mulai Pesan".
-- `app/kiosk/menu/page.tsx` — daftar produk dikelompokkan/ difilter per kategori (tab atau section).
-- Kartu produk: foto, nama, harga (format Rupiah), deskripsi singkat.
-- Produk `is_available = false` → grayed out / "Sold Out", tidak bisa ditambah.
-- Custom hook `useProducts()` / `useCategories()` memanggil service layer.
-- Loading & error state (skeleton, pesan ramah — app tidak boleh crash di depan pelanggan).
+- [x] `src/app/kiosk/page.tsx` — Home: sambutan + tombol besar "Mulai Pesan" → `/kiosk/menu`.
+- [x] `src/app/kiosk/menu/page.tsx` + `src/components/kiosk/MenuBrowser.tsx` — tab kategori (filter satu kategori, default kategori pertama), grid 2/3/4 kolom responsif.
+- [x] `ProductCard` — `ProductImage` (fallback 茶 bermerek, `<img>` untuk sekarang; next/image + Storage di Fase 8), nama, deskripsi (line-clamp 2), harga (`formatRupiah`), slot `action` untuk tombol cart Fase 4.
+- [x] Produk `is_available = false` → `opacity-60` + badge "Sold Out".
+- [x] Hook `src/hooks/useCatalog.ts` — panggil `listCategories` + `listCatalogProducts`, grouping per kategori, `{ loading, error, refetch }`.
+- [x] Loading: skeleton grid. Error: `EmptyState` + "Coba lagi" (refetch). `src/app/kiosk/error.tsx` — error boundary segmen kiosk (tidak pernah crash screen di depan pelanggan).
 
 **Deliverable:** Alur browsing kiosk fungsional (belum ada cart).
 **Acuan PRD:** 2.1.A langkah 1–3, 2.2 Menu Catalog.
-**DoD:** Menu load dari Supabase, kategori berpindah mulus, Sold Out tampil benar, tidak ada error saat koneksi gagal.
+**DoD:** Menu load dari Supabase (27 produk, 4 kategori terverifikasi) ✅ · tab kategori berpindah ✅ · Sold Out styling di `ProductCard` ✅ · error → EmptyState + retry, error boundary aktif ✅ · build (6 route) + tsc + lint hijau ✅.
 
 ---
 

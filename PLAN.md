@@ -55,27 +55,30 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 1 — Skema Database & Data Access Layer
+## Fase 1 — Skema Database & Data Access Layer  ✅ (kode) / ⏳ (apply ke Supabase)
 
 **Tujuan:** Semua tabel sesuai ERD ada, aman, dan diakses lewat service layer (bukan langsung dari komponen).
 
 **Tugas:**
-- Tulis migrasi SQL untuk 5 tabel (PRD Section 3):
-  - `kategori`, `produk`, `pesanan`, `detail_pesanan`, `rekap_harian`
-  - PK, FK, default (`is_available = true`, `waktu_pesanan = now()`, `status_pembayaran = unpaid`), enum/check untuk `tipe_pesanan` (dine-in/takeaway), `metode_pembayaran` (cash/qris), `status_pembayaran` (unpaid/paid), `status_pesanan` (new/preparing/done).
-  - Kolom soft delete pada `produk`: `deleted_at timestamp null` (default null).
-- Aktifkan RLS:
-  - Publik (anon): `SELECT` produk & kategori; `INSERT` pesanan + detail_pesanan.
-  - Admin (authenticated): full akses semua tabel.
-- Seed data awal: 2–3 kategori (Matcha, Coffee), ~8 produk contoh.
-- Data access layer di `src/services/supabase/`:
-  - `categories.ts`, `products.ts`, `orders.ts`, `recap.ts`
-  - Semua fungsi return `{ data, error }` dan menangani error eksplisit.
-- Tipe TypeScript untuk semua entitas (`src/types/`), idealnya generate dari Supabase.
+- [x] Migrasi SQL 5 tabel (PRD Section 3) di `supabase/migrations/`:
+  - `20260909120000_init_schema.sql` — tabel + CHECK (`tipe_pesanan`, `metode_pembayaran`, `status_pembayaran`, `status_pesanan`) + default (`is_available=true`, `waktu_pesanan=now()`, `status_pembayaran='unpaid'`, `status_pesanan='new'`) + `produk.deleted_at` (soft delete) + index + trigger `updated_at`. PK = `bigint identity` (`id_pesanan` sekaligus nomor antrean).
+  - `20260909120100_rls_policies.sql` — RLS semua tabel.
+  - `20260909120200_rpc_functions.sql` — `create_order` (atomik, SECURITY DEFINER, re-pricing dari katalog), `get_daily_sales` (live, hitung semua order), `close_daily_recap` (tutup buku, unique per tanggal). Batas hari = Asia/Jakarta.
+  - `20260909120300_realtime.sql` — `pesanan` masuk publication realtime.
+- [x] RLS: anon hanya `SELECT` katalog (produk non-deleted); pesanan **tidak** ada INSERT langsung — lewat RPC `create_order` (lebih aman, harga dari server). Admin (authenticated) full akses.
+- [x] Seed `supabase/seed.sql` — 3 kategori (Matcha, Coffee, Non-Coffee), 10 produk.
+- [x] Data access layer `src/services/supabase/`: `categories.ts`, `products.ts`, `orders.ts`, `recap.ts`, + `result.ts` (`Result<T>` = `{data,error}`, mapping error → pesan ID), barrel `index.ts`.
+- [x] Tipe `src/types/database.ts` (hand-written, siap diganti `supabase gen types`) + `src/types/index.ts` (alias domain).
+- [x] `npm run build` / `tsc --noEmit` hijau.
 
 **Deliverable:** Migrasi SQL commit di repo (`supabase/migrations/`), service layer + tipe.
 **Acuan PRD:** Section 3 (ERD), AGENTS.md Section 2 (SoC, isolasi Supabase).
-**DoD:** Query produk & kategori dari service layer berhasil; insert pesanan uji manual berhasil; RLS mencegah anon menulis ke `produk`.
+**DoD:** Query produk & kategori dari service layer berhasil ⏳ · insert pesanan (RPC) berhasil ⏳ · RLS mencegah anon menulis ke `produk` ⏳ — **semua diverifikasi otomatis oleh `npm run db:verify` setelah SQL di-apply.**
+
+**Sisa aksi user sebelum Fase 2:**
+1. Supabase Dashboard → SQL Editor → jalankan isi `supabase/_apply_all.generated.sql`.
+2. SQL Editor → jalankan `supabase/seed.sql`.
+3. Balik ke sini — saya jalankan `npm run db:verify` untuk cek DoD.
 
 ---
 

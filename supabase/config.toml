@@ -1,0 +1,11 @@
+# Supabase project config. Used by the Supabase CLI (`supabase link` / `db push`).
+project_id = "ksszwyejkqhmvsszhiqz"
+
+[db]
+# Local dev DB (only used with `supabase start`). Production runs on the linked project.
+port = 54322
+major_version = 15
+
+[db.seed]
+enabled = true
+sql_paths = ["./seed.sql"]

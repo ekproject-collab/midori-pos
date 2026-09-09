@@ -8,7 +8,9 @@
     "start": "next start",
     "lint": "eslint",
     "format": "prettier --write .",
-    "format:check": "prettier --check ."
+    "format:check": "prettier --check .",
+    "db:build": "node scripts/build-sql.mjs",
+    "db:verify": "node --env-file=.env.local scripts/verify-db.mjs"
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.116.0",

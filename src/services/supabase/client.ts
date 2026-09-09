@@ -1,6 +1,7 @@
 import { createClient, type SupabaseClient } from "@supabase/supabase-js";
 
 import { env } from "@/lib/env";
+import type { Database } from "@/types/database";
 
 /**
  * Single shared Supabase client for the browser / client components.
@@ -14,11 +15,13 @@ import { env } from "@/lib/env";
  *
  * Auth-aware server clients (cookie-bound) are added in the admin auth phase.
  */
-let cached: SupabaseClient | null = null;
+export type TypedSupabaseClient = SupabaseClient<Database>;
 
-export function getSupabaseClient(): SupabaseClient {
+let cached: TypedSupabaseClient | null = null;
+
+export function getSupabaseClient(): TypedSupabaseClient {
   if (!cached) {
-    cached = createClient(env.supabaseUrl, env.supabaseAnonKey, {
+    cached = createClient<Database>(env.supabaseUrl, env.supabaseAnonKey, {
       auth: {
         persistSession: true,
         autoRefreshToken: true,

@@ -135,19 +135,22 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ## Fase 5 — Kiosk: Konfirmasi Pesanan
 
+## Fase 5 — Kiosk: Konfirmasi Pesanan  ✅ SELESAI
+
 **Tujuan:** Pesanan tersimpan ke DB dan pelanggan dapat bukti.
 
 **Tugas:**
-- `orders.createOrder()` — insert `pesanan` + `detail_pesanan` dalam satu transaksi (RPC/Postgres function agar atomik).
-- Simpan `harga_satuan` & `subtotal` snapshot saat order (bukan join harga terbaru).
-- Set awal: `status_pesanan = new`, `status_pembayaran = unpaid` selalu (baik Cash maupun QRIS). Kiosk tidak pernah menandai `paid` — hanya admin setelah verifikasi.
-- Halaman sukses: nomor antrean / ID pesanan, ringkasan item, instruksi pembayaran (QRIS statis / bayar di kasir untuk Cash).
-- Tombol "Pesan Lagi" → reset cart, kembali ke Home.
-- Error handling: jika insert gagal, cart tidak hilang, tampilkan retry.
+- [x] Checkout `handleSubmit` → `createOrder()` (RPC `create_order`, dari Fase 1) — atomik `pesanan` + `detail_pesanan`, snapshot `harga_satuan`/`subtotal`, re-priced server-side.
+- [x] Status awal `new` / `unpaid` selalu (diverifikasi end-to-end: order dine-in QRIS → `status_pembayaran='unpaid'`, `status_pesanan='new'`, total cocok dengan re-pricing).
+- [x] `OrderConfirmation` (inline di `/kiosk/checkout` setelah sukses): nomor antrean `#id_pesanan` besar, nama + waktu, badge tipe/meja/metode/"Belum dibayar", daftar item + total, instruksi bayar (QRIS: scan di kasir · Cash: bayar tunai sebut nomor).
+- [x] Tombol "Pesan Lagi" → `clear()` + `router.push('/kiosk')`.
+- [x] Error handling: RPC gagal → `toast` danger, `submitting` reset, **cart tidak di-clear** (bisa retry). Redirect-ke-menu di-guard agar tak jalan di state sukses.
 
 **Deliverable:** Alur kiosk end-to-end selesai.
 **Acuan PRD:** 2.1.A langkah 6.
-**DoD:** Order muncul di tabel Supabase dengan detail benar; kegagalan jaringan tidak menghilangkan pesanan pelanggan.
+**DoD:** Order masuk ke Supabase dengan detail benar ✅ (end-to-end test: trim nama/meja, total re-priced, dine-in tanpa meja ditolak, produk tak dikenal ditolak) · kegagalan tidak menghilangkan pesanan pelanggan ✅ · build (8 route) + tsc + lint + 13 test hijau ✅.
+
+**Catatan:** QRIS masih instruksi teks (gambar QRIS statis = aset dari owner, Fase 10). DB kini berisi 1 pesanan uji (`#1`) — berguna untuk Fase 7, atau re-run `seed.sql` untuk bersih.
 
 ---
 

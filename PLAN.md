@@ -178,22 +178,22 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 7 — Admin: Order Queue (Realtime)
+## Fase 7 — Admin: Order Queue (Realtime)  ✅ SELESAI
 
 **Tujuan:** Pemilik memantau & memproses pesanan masuk secara real-time.
 
 **Tugas:**
-- `app/admin/orders/page.tsx` — List atau Kanban 3 kolom: New → Preparing → Done.
-- Supabase Realtime subscription pada tabel `pesanan` (auto-update saat order baru).
-- Aksi ubah status pesanan (tombol/drag) → `orders.updateStatus()`.
-- Toggle `status_pembayaran` → Paid (untuk Cash).
-- Detail pesanan: item, qty, tipe, meja, metode bayar, waktu.
-- Indikator visual pesanan baru (highlight / suara opsional).
-- Filter: tampilkan hari ini secara default.
+- [x] `src/app/admin/(dashboard)/orders/page.tsx` + `OrderQueueBoard` — Kanban 3 kolom (Baru / Sedang Disiapkan / Selesai), count per kolom, responsif.
+- [x] `src/hooks/useOrderQueue.ts` — load pesanan hari ini (`listOrdersForDay`, batas hari **Asia/Jakarta** via `jakartaToday()`), + Supabase Realtime `postgres_changes` (`INSERT` → `getOrder()` join detail lalu prepend + `markNew`; `UPDATE` → merge row). `realtime.setAuth(session token)` sebelum subscribe.
+- [x] Ubah status via tombol (`new→preparing→done`, + "Kembali"/"Buka lagi") → `updateOrderStatus()`, optimistic + revert on error.
+- [x] Toggle `status_pembayaran` (lunas/belum) untuk semua metode → `updatePaymentStatus()`, optimistic.
+- [x] `OrderCard` — `#id` + nama + jam, badge tipe/meja/metode/lunas, daftar item + qty + subtotal, total.
+- [x] Indikator baru: ring matcha + badge "Baru" (auto-hilang 30 dtk / saat di-proses) + chime dua-nada (`src/lib/beep.ts`, toggle 🔔 tersimpan di localStorage).
+- [x] Filter default: hari ini.
 
 **Deliverable:** Papan order operasional.
 **Acuan PRD:** 2.1.B langkah 2–3, 2.2 Order Management.
-**DoD:** Order baru dari kiosk muncul < 2 detik tanpa refresh; perubahan status persist di DB; tandai Paid bekerja.
+**DoD:** build (`/admin/orders` dynamic) + tsc + lint + 13 test hijau ✅ · realtime insert/update + status persist + Paid toggle ⏳ **butuh tes live** (login admin, buka `/admin/orders`, pesan dari `/kiosk` di tab lain).
 
 ---
 

@@ -21,3 +21,9 @@ export function formatJakartaDate(iso: string): string {
     timeZone: "Asia/Jakarta",
   });
 }
+
+/** Current shop-day (Asia/Jakarta) as `YYYY-MM-DD`. */
+export function jakartaToday(date: Date = new Date()): string {
+  // en-CA formats as ISO-style YYYY-MM-DD
+  return date.toLocaleDateString("en-CA", { timeZone: "Asia/Jakarta" });
+}

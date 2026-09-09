@@ -8,6 +8,8 @@ import type {
   TipePesanan,
 } from "@/types";
 
+import { jakartaToday } from "@/lib/format";
+
 import { getSupabaseClient } from "./client";
 import { fail, ok, runQuery, type Result } from "./result";
 
@@ -44,18 +46,21 @@ export async function createOrder(
   return ok(data as Pesanan);
 }
 
-/** Admin: orders for a given shop-day (default: today), newest first. */
+/**
+ * Admin: orders for a given shop-day (default: today, Asia/Jakarta), oldest
+ * first so the queue reads top-to-bottom in the order things should be made.
+ */
 export async function listOrdersForDay(
   tanggal?: string,
 ): Promise<Result<PesananWithDetail[]>> {
-  const day = tanggal ?? new Date().toISOString().slice(0, 10);
+  const day = tanggal ?? jakartaToday();
   return runQuery(
     getSupabaseClient()
       .from("pesanan")
       .select(WITH_DETAIL)
-      .gte("waktu_pesanan", `${day}T00:00:00`)
-      .lt("waktu_pesanan", `${day}T23:59:59.999`)
-      .order("waktu_pesanan", { ascending: false }),
+      .gte("waktu_pesanan", `${day}T00:00:00+07:00`)
+      .lt("waktu_pesanan", `${day}T23:59:59.999+07:00`)
+      .order("waktu_pesanan", { ascending: true }),
   );
 }
 

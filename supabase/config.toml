@@ -1,5 +1,6 @@
 # Supabase project config. Used by the Supabase CLI (`supabase link` / `db push`).
-project_id = "ksszwyejkqhmvsszhiqz"
+# Replace with your own project ref (Supabase → Project Settings → General).
+project_id = "your-project-ref"
 
 [db]
 # Local dev DB (only used with `supabase start`). Production runs on the linked project.

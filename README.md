@@ -6,6 +6,7 @@ Self-ordering kiosk POS for a matcha & coffee shop, with a single-admin dashboar
 - **Build plan (phased):** [PLAN.md](PLAN.md)
 - **Coding & UI rules:** [AGENTS.md](AGENTS.md)
 - **Owner's guide (Bahasa Indonesia):** [docs/OWNER.md](docs/OWNER.md)
+- **Deploy from scratch (new accounts):** [docs/DEPLOY.md](docs/DEPLOY.md)
 - **Database:** [supabase/README.md](supabase/README.md)
 
 ## Features

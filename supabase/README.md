@@ -30,7 +30,7 @@ follow [../PRD.md](../PRD.md) Section 3 verbatim.
 # one-time
 npm i -g supabase        # or: scoop install supabase / brew install supabase
 supabase login
-supabase link --project-ref ksszwyejkqhmvsszhiqz
+supabase link --project-ref <your-project-ref>
 
 # apply
 supabase db push         # runs migrations/
@@ -54,7 +54,7 @@ All day boundaries (`get_daily_sales`, `close_daily_recap`) use **Asia/Jakarta**
 After changing the schema, regenerate `src/types/database.ts`:
 
 ```bash
-supabase gen types typescript --project-id ksszwyejkqhmvsszhiqz > src/types/database.ts
+supabase gen types typescript --project-id <your-project-ref> > src/types/database.ts
 ```
 
 Until the CLI is set up, `src/types/database.ts` is maintained by hand to match

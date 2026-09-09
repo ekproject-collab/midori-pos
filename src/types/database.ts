@@ -1,7 +1,7 @@
 /**
  * Supabase schema types — hand-maintained to match `supabase/migrations/`.
  * Replace with generated output once the Supabase CLI is set up:
- *   supabase gen types typescript --project-id ksszwyejkqhmvsszhiqz > src/types/database.ts
+ *   supabase gen types typescript --project-id <your-project-ref> > src/types/database.ts
  */
 
 export type TipePesanan = "dine_in" | "takeaway";

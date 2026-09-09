@@ -140,7 +140,7 @@ as $$
   where (waktu_pesanan at time zone 'Asia/Jakarta')::date = p_tanggal;
 $$;
 
-revoke all on function public.get_daily_sales(date) from public;
+revoke all on function public.get_daily_sales(date) from public, anon;
 grant execute on function public.get_daily_sales(date) to authenticated;
 
 -- ---------------------------------------------------------------------------
@@ -184,5 +184,5 @@ begin
 end;
 $$;
 
-revoke all on function public.close_daily_recap(date) from public;
+revoke all on function public.close_daily_recap(date) from public, anon;
 grant execute on function public.close_daily_recap(date) to authenticated;

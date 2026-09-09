@@ -40,22 +40,30 @@ check(
   prods.error?.message,
 );
 
-// 2. RLS blocks anon writes to produk
-const wDelete = await supabase.from("produk").delete().eq("id_produk", 1);
+// 2. RLS blocks anon writes to produk.
+// Note: for INSERT/UPDATE/DELETE, an RLS denial does NOT raise an error — it
+// silently affects zero rows — so we assert by re-reading the target row.
+const target = (prods.data ?? [])[0];
 const wInsert = await supabase
   .from("produk")
-  .insert({ id_kategori: 1, nama_produk: "HACK", harga: 1 })
+  .insert({ id_kategori: target?.id_kategori ?? 1, nama_produk: "HACK", harga: 1 })
   .select();
-// RLS denial surfaces as either an error or zero rows affected.
 check(
   "anon CANNOT insert produk",
   wInsert.error !== null || (wInsert.data?.length ?? 0) === 0,
   "insert unexpectedly succeeded",
 );
+
+await supabase.from("produk").delete().eq("id_produk", target?.id_produk);
+const stillThere = await supabase
+  .from("produk")
+  .select("id_produk")
+  .eq("id_produk", target?.id_produk)
+  .maybeSingle();
 check(
   "anon CANNOT delete produk",
-  wDelete.error !== null,
-  "delete unexpectedly succeeded",
+  stillThere.data?.id_produk === target?.id_produk,
+  "row disappeared after anon delete",
 );
 
 // 3. anon cannot read orders directly

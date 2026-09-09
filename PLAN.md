@@ -55,7 +55,7 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 ---
 
-## Fase 1 — Skema Database & Data Access Layer  ✅ (kode) / ⏳ (apply ke Supabase)
+## Fase 1 — Skema Database & Data Access Layer  ✅ SELESAI (diverifikasi `npm run db:verify`, 10/10)
 
 **Tujuan:** Semua tabel sesuai ERD ada, aman, dan diakses lewat service layer (bukan langsung dari komponen).
 
@@ -73,12 +73,9 @@ Total estimasi kasar: **~12 hari kerja** (solo dev).
 
 **Deliverable:** Migrasi SQL commit di repo (`supabase/migrations/`), service layer + tipe.
 **Acuan PRD:** Section 3 (ERD), AGENTS.md Section 2 (SoC, isolasi Supabase).
-**DoD:** Query produk & kategori dari service layer berhasil ⏳ · insert pesanan (RPC) berhasil ⏳ · RLS mencegah anon menulis ke `produk` ⏳ — **semua diverifikasi otomatis oleh `npm run db:verify` setelah SQL di-apply.**
+**DoD:** Query produk & kategori dari service layer berhasil ✅ · insert pesanan (RPC) berhasil ✅ · RLS mencegah anon menulis ke `produk` ✅ · RPC admin tertutup dari anon ✅ — `npm run db:verify` 10/10.
 
-**Sisa aksi user sebelum Fase 2:**
-1. Supabase Dashboard → SQL Editor → jalankan isi `supabase/_apply_all.generated.sql`.
-2. SQL Editor → jalankan `supabase/seed.sql`.
-3. Balik ke sini — saya jalankan `npm run db:verify` untuk cek DoD.
+**Catatan:** migrasi `20260909120400_fix_function_grants.sql` ditambahkan setelah verifikasi (Supabase auto-grant execute ke `anon`, harus di-revoke eksplisit). `scripts/verify-db.mjs` menyisakan pesanan uji tiap run — **re-run `supabase/seed.sql` sekali sebelum Fase 3** untuk bersih.
 
 ---
 

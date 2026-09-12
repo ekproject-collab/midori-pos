@@ -4,6 +4,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import type { ReactNode } from "react";
 
+import { MidoriLogo } from "@/components/brand/MidoriLogo";
 import { signOutAdmin } from "@/services/supabase/auth-actions";
 import { cn } from "@/lib/cn";
 
@@ -28,10 +29,8 @@ export function AdminShell({ children, adminEmail }: AdminShellProps) {
     <div className="bg-background flex min-h-dvh">
       <aside className="border-border bg-surface sticky top-0 hidden h-dvh w-60 shrink-0 flex-col self-start overflow-y-auto border-r p-4 md:flex">
         <div className="mb-6 flex items-center gap-2 px-2">
-          <span className="text-xl leading-none" aria-hidden>
-            茶
-          </span>
-          <span className="font-bold">Midori Admin</span>
+          <MidoriLogo size={32} />
+          <span className="font-bold">Admin</span>
         </div>
         <nav className="flex flex-col gap-1">
           {NAV.map((item) => {

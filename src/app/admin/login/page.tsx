@@ -2,6 +2,7 @@
 
 import { useActionState } from "react";
 
+import { MidoriLogo } from "@/components/brand/MidoriLogo";
 import { Button, Field, Input } from "@/components/ui";
 import { signInAdmin, type LoginState } from "@/services/supabase/auth-actions";
 
@@ -17,9 +18,7 @@ export default function AdminLoginPage() {
     <main className="bg-background flex min-h-dvh items-center justify-center p-6">
       <div className="border-border bg-surface shadow-hard-sm w-full max-w-sm space-y-6 border p-6">
         <div className="space-y-1 text-center">
-          <p className="text-3xl" aria-hidden>
-            茶
-          </p>
+          <MidoriLogo size={72} className="mx-auto" priority />
           <h1 className="text-xl font-bold">Midori Admin</h1>
           <p className="text-muted text-sm">Masuk untuk mengelola pesanan.</p>
         </div>

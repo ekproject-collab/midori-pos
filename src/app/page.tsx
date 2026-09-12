@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+import { MidoriLogo } from "@/components/brand/MidoriLogo";
 import { Card } from "@/components/ui";
 
 export default function RootPage() {
@@ -7,7 +8,7 @@ export default function RootPage() {
     <main className="mx-auto flex max-w-2xl flex-1 flex-col justify-center gap-8 p-8">
       <header className="space-y-2">
         <h1 className="flex items-center gap-3 text-3xl font-bold tracking-tight">
-          <span aria-hidden>茶</span> Midori POS
+          <MidoriLogo size={40} /> Midori POS
         </h1>
         <p className="text-muted">
           Sistem POS kiosk self-ordering untuk kedai matcha &amp; coffee.

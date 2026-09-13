@@ -10,7 +10,7 @@ import {
   formatRupiah,
   jakartaToday,
 } from "@/lib/format";
-import type { RekapHarian } from "@/types";
+import type { RekapHarian, UnclosedDay } from "@/types";
 
 import { StatTile } from "./StatTile";
 
@@ -43,9 +43,19 @@ function downloadCsv(rows: RekapHarian[]) {
 }
 
 export function ReportsView() {
-  const { today, history, loading, error, closing, refetch, closeToday } =
-    useReports();
+  const {
+    today,
+    history,
+    unclosed,
+    loading,
+    error,
+    closing,
+    refetch,
+    closeToday,
+    closeDay,
+  } = useReports();
   const [confirmOpen, setConfirmOpen] = useState(false);
+  const [pendingClose, setPendingClose] = useState<UnclosedDay | null>(null);
 
   if (loading) return <Skeleton className="h-72 w-full" />;
 
@@ -65,6 +75,38 @@ export function ReportsView() {
 
   return (
     <div className="space-y-8">
+      {unclosed.length > 0 && (
+        <section className="border-warning-700/30 bg-warning-100 space-y-2 rounded-md border p-4">
+          <h2 className="text-warning-700 font-semibold">
+            Ada rekap yang belum ditutup
+          </h2>
+          <p className="text-ink-700 text-sm">
+            Hari-hari ini sudah lewat tapi belum ditutup buku. Pesanannya tetap
+            aman di database — cuma belum ada ringkasan resmi tersimpan.
+          </p>
+          <ul className="space-y-2 pt-1">
+            {unclosed.map((d) => (
+              <li
+                key={d.tanggal}
+                className="border-border bg-surface flex flex-wrap items-center justify-between gap-2 rounded-md border px-3 py-2"
+              >
+                <span className="text-sm">
+                  <span className="font-semibold">
+                    {formatJakartaDate(`${d.tanggal}T00:00:00+07:00`)}
+                  </span>{" "}
+                  <span className="text-muted">
+                    · {d.total_transaksi} transaksi
+                  </span>
+                </span>
+                <Button size="sm" onClick={() => setPendingClose(d)}>
+                  Tutup Buku
+                </Button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       <section className="space-y-3">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <h2 className="font-semibold">
@@ -234,6 +276,43 @@ export function ReportsView() {
             </li>
           </ul>
         </div>
+      </Modal>
+
+      <Modal
+        open={pendingClose !== null}
+        onClose={() => setPendingClose(null)}
+        title={
+          pendingClose
+            ? `Tutup buku ${formatJakartaDate(`${pendingClose.tanggal}T00:00:00+07:00`)}?`
+            : "Tutup buku?"
+        }
+        footer={
+          <>
+            <Button
+              variant="ghost"
+              onClick={() => setPendingClose(null)}
+              disabled={closing}
+            >
+              Batal
+            </Button>
+            <Button
+              onClick={async () => {
+                if (!pendingClose) return;
+                const ok = await closeDay(pendingClose.tanggal);
+                if (ok) setPendingClose(null);
+              }}
+              disabled={closing}
+            >
+              {closing ? "Menutup…" : "Ya, Tutup Buku"}
+            </Button>
+          </>
+        }
+      >
+        <p className="text-muted text-sm">
+          Hari ini terlewat ditutup ({pendingClose?.total_transaksi} transaksi
+          tercatat). Angka akan dihitung dari semua pesanan tanggal tersebut dan
+          dikunci sebagai riwayat — tidak bisa diubah lagi setelah ini.
+        </p>
       </Modal>
     </div>
   );

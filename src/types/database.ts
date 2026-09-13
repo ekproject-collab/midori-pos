@@ -181,6 +181,10 @@ export interface Database {
         Args: { p_tanggal?: string };
         Returns: Database["public"]["Tables"]["rekap_harian"]["Row"];
       };
+      get_unclosed_days: {
+        Args: Record<string, never>;
+        Returns: { tanggal: string; total_transaksi: number }[];
+      };
     };
     Enums: Record<string, never>;
     CompositeTypes: Record<string, never>;

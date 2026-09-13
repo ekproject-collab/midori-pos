@@ -32,3 +32,7 @@ export interface OrderItemInput {
 /** Live (pre-close) sales figures for a shop-day. */
 export type DailySales =
   Database["public"]["Functions"]["get_daily_sales"]["Returns"][number];
+
+/** A past shop-day that has orders but was never closed into rekap_harian. */
+export type UnclosedDay =
+  Database["public"]["Functions"]["get_unclosed_days"]["Returns"][number];

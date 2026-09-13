@@ -1,4 +1,4 @@
-import type { DailySales, RekapHarian } from "@/types";
+import type { DailySales, RekapHarian, UnclosedDay } from "@/types";
 
 import { getSupabaseClient } from "./client";
 import { fail, ok, runQuery, type Result } from "./result";
@@ -44,4 +44,15 @@ export async function listRecaps(): Promise<Result<RekapHarian[]>> {
       .select("*")
       .order("tanggal", { ascending: false }),
   );
+}
+
+/**
+ * Admin: past shop-days that have orders but were never closed (e.g. the
+ * admin missed "Tutup Buku" before the date rolled over). Lets those be
+ * closed retroactively — close_daily_recap() accepts any past date.
+ */
+export async function listUnclosedDays(): Promise<Result<UnclosedDay[]>> {
+  const { data, error } = await getSupabaseClient().rpc("get_unclosed_days");
+  if (error) return fail(error.message);
+  return ok(data ?? []);
 }

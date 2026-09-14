@@ -13,7 +13,10 @@ follow [../PRD.md](../PRD.md) Section 3 verbatim.
 | `migrations/20260909120300_realtime.sql` | Adds `pesanan` to the `supabase_realtime` publication |
 | `migrations/20260909120400_fix_function_grants.sql` | Revokes admin RPC EXECUTE from `anon` |
 | `migrations/20260909120500_storage_produk_images.sql` | Public `produk-images` Storage bucket + policies (Phase 8 image uploads) |
+| `migrations/20260909120600_rate_limit_orders.sql` | Per-IP flood protection inside `create_order` (30 orders / 5 min) |
+| `migrations/20260913090000_unclosed_days.sql` | `get_unclosed_days()` — finds past days with orders but no `rekap_harian` row, so a missed "Tutup Buku" can be closed retroactively |
 | `seed.sql` | Full Midori catalog (4 categories, 27 products). Re-runnable — wipes catalog + orders first. |
+| `seed_orders.sql` | **Dev/test only.** 24 synthetic orders for today (8 new / 7 preparing / 9 done) — enough to exercise Order Queue pagination. Re-runnable — wipes `pesanan` first. Never run against real shop data. |
 | `_apply_all.generated.sql` | All migrations concatenated — for the one-paste path below. Regenerate with `npm run db:build`. |
 
 ## Applying it
@@ -23,6 +26,8 @@ follow [../PRD.md](../PRD.md) Section 3 verbatim.
 1. Supabase Dashboard → **SQL Editor** → New query.
 2. Paste all of `_apply_all.generated.sql`, run.
 3. New query → paste `seed.sql`, run (dev only).
+4. Optional, dev only → new query → paste `seed_orders.sql`, run, to populate
+   the Order Queue with test data (also handy for re-testing pagination).
 
 ### Option B — Supabase CLI (recommended once set up)
 

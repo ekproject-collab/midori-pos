@@ -10,15 +10,15 @@ import { Skeleton } from "@/components/ui";
 import { CategoryTabs } from "./CategoryTabs";
 import { ProductCard } from "./ProductCard";
 
-const GRID = "grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-4";
+const GRID = "grid grid-cols-2 gap-4 lg:grid-cols-3";
 
 function LoadingGrid() {
   return (
     <div className="space-y-4">
-      <Skeleton className="h-10 w-64" />
+      <Skeleton className="h-12 w-72" />
       <div className={GRID}>
-        {Array.from({ length: 8 }).map((_, i) => (
-          <Skeleton key={i} className="h-64 w-full" />
+        {Array.from({ length: 6 }).map((_, i) => (
+          <Skeleton key={i} className="h-80 w-full" />
         ))}
       </div>
     </div>
@@ -57,7 +57,7 @@ export function MenuBrowser() {
   const products = productsByCategory.get(activeId) ?? [];
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-5">
       <CategoryTabs
         categories={categories}
         activeId={activeId}

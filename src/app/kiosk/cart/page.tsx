@@ -6,10 +6,10 @@ import { KioskShell } from "@/components/layout/KioskShell";
 export default function KioskCartPage() {
   return (
     <KioskShell>
-      <div className="space-y-5">
+      <div className="space-y-6">
         <div className="flex items-center justify-between gap-3">
-          <h1 className="text-2xl font-bold">Keranjang</h1>
-          <Link href="/kiosk/menu" className="text-muted text-sm underline">
+          <h1 className="text-3xl font-bold">Keranjang</h1>
+          <Link href="/kiosk/menu" className="text-muted text-base underline">
             ← Menu
           </Link>
         </div>

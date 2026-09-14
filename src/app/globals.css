@@ -90,10 +90,16 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-/* Kiosk screens bump the base size for arm's-length tablet readability. */
-.kiosk-root {
-  font-size: 1.0625rem;
-}
+/*
+ * NOTE: kiosk arm's-length readability is handled by bumping each Tailwind
+ * text-size and spacing utility explicitly in the kiosk components, NOT by a
+ * local font-size here. `rem` (what Tailwind's text utilities use) always
+ * resolves against the root html font-size regardless of any ancestor's own
+ * font-size, so a rule like ".kiosk-root { font-size: 1.0625rem }" silently
+ * does nothing for any descendant that has its own text utility class —
+ * effectively all of them. Kept as a class hook on the kiosk shell in case a
+ * future rule needs to target it.
+ */
 
 /* Consistent focus ring across the app. */
 :where(a, button, input, select, textarea, [tabindex]):focus-visible {

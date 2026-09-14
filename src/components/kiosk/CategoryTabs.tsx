@@ -30,7 +30,7 @@ export function CategoryTabs({
             aria-selected={active}
             onClick={() => onSelect(category.id_kategori)}
             className={cn(
-              "shrink-0 border-b-2 px-4 py-2.5 text-sm font-semibold whitespace-nowrap",
+              "shrink-0 border-b-2 px-5 py-3.5 text-lg font-semibold whitespace-nowrap",
               active
                 ? "border-matcha-600 text-matcha-800"
                 : "text-muted hover:text-ink-900 border-transparent",

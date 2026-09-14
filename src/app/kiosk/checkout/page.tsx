@@ -75,16 +75,16 @@ export default function KioskCheckoutPage() {
 
   return (
     <KioskShell>
-      <div className="space-y-5">
+      <div className="space-y-6">
         <div className="flex items-center justify-between gap-3">
-          <h1 className="text-2xl font-bold">Checkout</h1>
-          <Link href="/kiosk/cart" className="text-muted text-sm underline">
+          <h1 className="text-3xl font-bold">Checkout</h1>
+          <Link href="/kiosk/cart" className="text-muted text-base underline">
             ← Keranjang
           </Link>
         </div>
 
-        <div className="grid gap-6 lg:grid-cols-[1fr_20rem]">
-          <div className="border-border bg-surface rounded-md border p-4">
+        <div className="grid gap-6 lg:grid-cols-[1fr_22rem]">
+          <div className="border-border bg-surface rounded-md border p-6">
             <CheckoutForm onSubmit={handleSubmit} submitting={submitting} />
           </div>
           <OrderSummary />

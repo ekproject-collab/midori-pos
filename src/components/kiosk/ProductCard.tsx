@@ -25,21 +25,23 @@ export function ProductCard({ product, action }: ProductCardProps) {
         <ProductImage
           src={product.gambar_url}
           alt={product.nama_produk}
-          sizes="(min-width: 1024px) 22vw, (min-width: 640px) 30vw, 45vw"
+          sizes="(min-width: 1024px) 30vw, (min-width: 640px) 30vw, 45vw"
         />
         {soldOut && (
-          <span className="absolute top-2 right-2">
+          <span className="absolute top-3 right-3">
             <Badge tone="danger">Sold Out</Badge>
           </span>
         )}
       </div>
 
-      <div className="flex flex-1 flex-col gap-1 p-3">
-        <h3 className="leading-tight font-semibold">{product.nama_produk}</h3>
+      <div className="flex flex-1 flex-col gap-1.5 p-4">
+        <h3 className="text-lg leading-tight font-semibold">
+          {product.nama_produk}
+        </h3>
         {product.deskripsi && (
-          <p className="text-muted line-clamp-2 text-xs">{product.deskripsi}</p>
+          <p className="text-muted line-clamp-2 text-sm">{product.deskripsi}</p>
         )}
-        <p className="mt-auto pt-2 font-bold tabular-nums">
+        <p className="mt-auto pt-2 text-xl font-bold tabular-nums">
           {formatRupiah(product.harga)}
         </p>
         {action && <div className="pt-2">{action}</div>}

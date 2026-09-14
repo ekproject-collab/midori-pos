@@ -41,9 +41,9 @@ function OptionGroup<T extends string>({
   onChange: (v: T) => void;
 }) {
   return (
-    <fieldset className="space-y-1">
-      <legend className="text-ink-700 text-sm font-semibold">{legend}</legend>
-      <div className="flex gap-2">
+    <fieldset className="space-y-2">
+      <legend className="text-ink-700 text-base font-semibold">{legend}</legend>
+      <div className="flex gap-3">
         {options.map((opt) => (
           <button
             key={opt.value}
@@ -51,7 +51,7 @@ function OptionGroup<T extends string>({
             aria-pressed={value === opt.value}
             onClick={() => onChange(opt.value)}
             className={cn(
-              "flex-1 rounded-md border px-4 py-2 text-sm font-semibold",
+              "flex-1 rounded-md border px-5 py-3 text-base font-semibold",
               value === opt.value
                 ? "border-matcha-700 bg-matcha-600 text-white"
                 : "border-border bg-surface text-ink-900 hover:bg-cream-100",
@@ -91,10 +91,17 @@ export function CheckoutForm({
   };
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5" noValidate>
-      <Field label="Nama" required htmlFor="nama" error={showError("nama")}>
+    <form onSubmit={handleSubmit} className="space-y-6" noValidate>
+      <Field
+        label="Nama"
+        required
+        htmlFor="nama"
+        error={showError("nama")}
+        size="lg"
+      >
         <Input
           id="nama"
+          size="lg"
           value={values.nama}
           onChange={(e) => set("nama", e.target.value)}
           placeholder="Nama untuk dipanggil"
@@ -116,9 +123,11 @@ export function CheckoutForm({
           required
           htmlFor="meja"
           error={showError("nomorMeja")}
+          size="lg"
         >
           <Input
             id="meja"
+            size="lg"
             value={values.nomorMeja}
             onChange={(e) => set("nomorMeja", e.target.value)}
             placeholder="mis. 4"
@@ -135,12 +144,12 @@ export function CheckoutForm({
         onChange={(v) => set("metode", v)}
       />
 
-      <div className="border-border flex items-center justify-between border-t pt-4 text-lg">
+      <div className="border-border flex items-center justify-between border-t pt-4 text-xl">
         <span className="font-semibold">Total ({itemCount} item)</span>
         <span className="font-bold tabular-nums">{formatRupiah(subtotal)}</span>
       </div>
 
-      <Button type="submit" size="lg" block disabled={submitting}>
+      <Button type="submit" size="xl" block disabled={submitting}>
         {submitting ? "Memproses…" : "Buat Pesanan"}
       </Button>
     </form>

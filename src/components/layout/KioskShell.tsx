@@ -24,7 +24,7 @@ export function KioskShell({ children, footer, className }: KioskShellProps) {
       className="kiosk-root bg-background flex min-h-dvh flex-col bg-cover bg-center bg-no-repeat"
       style={{ backgroundImage: "url(/kiosk-background.jpeg)" }}
     >
-      <main className={cn("mx-auto w-full max-w-5xl flex-1 p-6", className)}>
+      <main className={cn("mx-auto w-full max-w-6xl flex-1 p-8", className)}>
         {children}
       </main>
 

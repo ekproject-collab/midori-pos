@@ -36,61 +36,64 @@ export function CartView() {
     <div className="space-y-4">
       <ul className="divide-border border-border bg-surface divide-y rounded-md border">
         {items.map((item) => (
-          <li key={item.id_produk} className="flex gap-3 p-3">
-            <div className="border-border relative h-16 w-16 shrink-0 overflow-hidden rounded-sm border">
+          <li key={item.id_produk} className="flex gap-4 p-4">
+            <div className="border-border relative h-20 w-20 shrink-0 overflow-hidden rounded-sm border">
               <ProductImage src={item.gambar_url} alt={item.nama_produk} />
             </div>
 
             <div className="flex min-w-0 flex-1 flex-col gap-1">
-              <p className="leading-tight font-semibold">{item.nama_produk}</p>
-              <p className="text-muted text-xs tabular-nums">
+              <p className="text-lg leading-tight font-semibold">
+                {item.nama_produk}
+              </p>
+              <p className="text-muted text-sm tabular-nums">
                 {formatRupiah(item.harga)} / item
               </p>
-              <div className="mt-1 flex items-center gap-3">
+              <div className="mt-1 flex items-center gap-4">
                 <QuantityStepper
                   value={item.kuantitas}
                   min={0}
+                  size="lg"
                   onChange={(next) => setQuantity(item.id_produk, next)}
                   aria-label={`Kuantitas ${item.nama_produk}`}
                 />
                 <button
                   type="button"
                   onClick={() => remove(item.id_produk)}
-                  className="text-danger-700 text-xs underline"
+                  className="text-danger-700 text-sm underline"
                 >
                   Hapus
                 </button>
               </div>
             </div>
 
-            <div className="shrink-0 self-end font-bold tabular-nums">
+            <div className="shrink-0 self-end text-lg font-bold tabular-nums">
               {formatRupiah(selectLineSubtotal(item))}
             </div>
           </li>
         ))}
       </ul>
 
-      <div className="border-border flex items-center justify-between border-t pt-3 text-lg">
+      <div className="border-border flex items-center justify-between border-t pt-4 text-xl">
         <span className="font-semibold">Total</span>
         <span className="font-bold tabular-nums">{formatRupiah(subtotal)}</span>
       </div>
 
-      <div className="flex flex-col gap-2 sm:flex-row-reverse sm:items-center sm:justify-between">
+      <div className="flex flex-col gap-3 sm:flex-row-reverse sm:items-center sm:justify-between">
         <Link
           href="/kiosk/checkout"
           className={buttonClass({
-            size: "lg",
+            size: "xl",
             block: true,
             className: "sm:w-auto",
           })}
         >
           Lanjut ke Checkout
         </Link>
-        <div className="flex gap-3">
-          <Link href="/kiosk/menu" className="text-muted text-sm underline">
+        <div className="flex items-center gap-4">
+          <Link href="/kiosk/menu" className="text-muted text-base underline">
             ← Tambah item lagi
           </Link>
-          <Button variant="ghost" size="sm" onClick={clear}>
+          <Button variant="ghost" size="md" onClick={clear}>
             Kosongkan
           </Button>
         </div>

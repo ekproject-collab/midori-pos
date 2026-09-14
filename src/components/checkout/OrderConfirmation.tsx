@@ -20,28 +20,28 @@ export function OrderConfirmation({
   const isQris = order.metode_pembayaran === "qris";
 
   return (
-    <div className="mx-auto max-w-md space-y-5">
-      <div className="space-y-1 text-center">
-        <p className="text-2xl">🍵</p>
-        <h1 className="text-2xl font-bold">Pesanan diterima</h1>
-        <p className="text-muted">
+    <div className="mx-auto max-w-xl space-y-6">
+      <div className="space-y-2 text-center">
+        <p className="text-4xl">🍵</p>
+        <h1 className="text-3xl font-bold">Pesanan diterima</h1>
+        <p className="text-muted text-lg">
           Pesananmu sudah dikirim ke dapur. Tunjukkan nomor ini di kasir.
         </p>
       </div>
 
       {/* Queue number */}
-      <div className="border-ink-900 bg-matcha-50 shadow-hard-sm rounded-md border p-6 text-center">
-        <p className="text-muted text-xs font-semibold tracking-wide uppercase">
+      <div className="border-ink-900 bg-matcha-50 shadow-hard-sm rounded-md border p-8 text-center">
+        <p className="text-muted text-sm font-semibold tracking-wide uppercase">
           Nomor Antrean
         </p>
-        <p className="text-matcha-800 text-5xl font-bold tabular-nums">
+        <p className="text-matcha-800 text-7xl font-bold tabular-nums">
           #{order.id_pesanan}
         </p>
       </div>
 
       {/* Order detail */}
-      <div className="border-border bg-surface space-y-3 rounded-md border p-4">
-        <div className="flex flex-wrap items-center justify-between gap-2 text-sm">
+      <div className="border-border bg-surface space-y-4 rounded-md border p-5">
+        <div className="flex flex-wrap items-center justify-between gap-2 text-base">
           <span className="font-semibold">{order.nama_pelanggan}</span>
           <span className="text-muted">
             {formatJakartaTime(order.waktu_pesanan)}
@@ -57,7 +57,7 @@ export function OrderConfirmation({
           <Badge tone="warning">Belum dibayar</Badge>
         </div>
 
-        <ul className="border-border space-y-1 border-t pt-3 text-sm">
+        <ul className="border-border space-y-2 border-t pt-4 text-base">
           {items.map((item) => (
             <li key={item.id_produk} className="flex justify-between gap-2">
               <span>
@@ -70,7 +70,7 @@ export function OrderConfirmation({
             </li>
           ))}
         </ul>
-        <div className="border-border flex justify-between border-t pt-3 font-bold">
+        <div className="border-border flex justify-between border-t pt-4 text-lg font-bold">
           <span>Total</span>
           <span className="tabular-nums">
             {formatRupiah(order.total_harga)}
@@ -79,7 +79,7 @@ export function OrderConfirmation({
       </div>
 
       {/* Payment instructions */}
-      <div className="border-border bg-cream-100 rounded-md border p-4 text-sm">
+      <div className="border-border bg-cream-100 rounded-md border p-5 text-base">
         <p className="font-semibold">
           {isQris ? "Pembayaran QRIS" : "Pembayaran Tunai"}
         </p>
@@ -93,7 +93,7 @@ export function OrderConfirmation({
         </p>
       </div>
 
-      <Button size="lg" block onClick={onOrderAgain}>
+      <Button size="xl" block onClick={onOrderAgain}>
         Pesan Lagi
       </Button>
     </div>

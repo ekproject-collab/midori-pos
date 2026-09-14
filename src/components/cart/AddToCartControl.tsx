@@ -15,7 +15,7 @@ export function AddToCartControl({ product }: { product: ProdukWithKategori }) {
 
   if (!product.is_available) {
     return (
-      <Button size="sm" block disabled>
+      <Button size="lg" block disabled>
         Sold Out
       </Button>
     );
@@ -24,7 +24,7 @@ export function AddToCartControl({ product }: { product: ProdukWithKategori }) {
   if (qty === 0) {
     return (
       <Button
-        size="sm"
+        size="lg"
         block
         onClick={() =>
           add({
@@ -44,6 +44,7 @@ export function AddToCartControl({ product }: { product: ProdukWithKategori }) {
     <QuantityStepper
       value={qty}
       min={0}
+      size="lg"
       onChange={(next) => setQuantity(product.id_produk, next)}
       className="w-full justify-between"
       aria-label={`Kuantitas ${product.nama_produk}`}

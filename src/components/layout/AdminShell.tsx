@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 
 import { MidoriLogo } from "@/components/brand/MidoriLogo";
 import { signOutAdmin } from "@/services/supabase/auth-actions";
@@ -15,19 +15,46 @@ const NAV = [
   { href: "/admin/reports", label: "Laporan / Close Order" },
 ];
 
+const SIDEBAR_KEY = "midori-admin-sidebar";
+
 export interface AdminShellProps {
   children: ReactNode;
   /** Shown in the header bar and page context. */
   adminEmail?: string;
 }
 
-/** Desktop dashboard shell: fixed sidebar + scrollable content. */
+/** Desktop dashboard shell: collapsible sidebar + scrollable content. */
 export function AdminShell({ children, adminEmail }: AdminShellProps) {
   const pathname = usePathname();
 
+  const [sidebarOpen, setSidebarOpen] = useState<boolean>(() => {
+    try {
+      return localStorage.getItem(SIDEBAR_KEY) !== "0";
+    } catch {
+      return true;
+    }
+  });
+
+  const toggleSidebar = () => {
+    setSidebarOpen((open) => {
+      const next = !open;
+      try {
+        localStorage.setItem(SIDEBAR_KEY, next ? "1" : "0");
+      } catch {
+        // ignore
+      }
+      return next;
+    });
+  };
+
   return (
     <div className="bg-background flex min-h-dvh">
-      <aside className="border-border bg-surface sticky top-0 hidden h-dvh w-60 shrink-0 flex-col self-start overflow-y-auto border-r p-4 md:flex">
+      <aside
+        className={cn(
+          "border-border bg-surface sticky top-0 h-dvh w-60 shrink-0 flex-col self-start overflow-y-auto border-r p-4",
+          sidebarOpen ? "hidden md:flex" : "hidden",
+        )}
+      >
         <div className="mb-6 flex items-center gap-2 px-2">
           <MidoriLogo size={32} />
           <span className="font-bold">Admin</span>
@@ -57,10 +84,24 @@ export function AdminShell({ children, adminEmail }: AdminShellProps) {
 
       <div className="flex min-w-0 flex-1 flex-col">
         <header className="border-border bg-surface sticky top-0 z-20 flex items-center justify-between gap-3 border-b px-6 py-3">
-          <span className="text-muted text-sm md:hidden">Midori Admin</span>
-          <span className="text-muted hidden text-sm md:inline">
-            {adminEmail}
-          </span>
+          <div className="flex items-center gap-3">
+            <button
+              type="button"
+              onClick={toggleSidebar}
+              aria-pressed={sidebarOpen}
+              title={sidebarOpen ? "Sembunyikan menu" : "Tampilkan menu"}
+              className="border-border text-ink-700 hover:bg-cream-100 hidden h-9 w-9 items-center justify-center rounded-md border text-base md:inline-flex"
+            >
+              <span aria-hidden>☰</span>
+              <span className="sr-only">
+                {sidebarOpen ? "Sembunyikan menu" : "Tampilkan menu"}
+              </span>
+            </button>
+            <span className="text-muted text-sm md:hidden">Midori Admin</span>
+            <span className="text-muted hidden text-sm md:inline">
+              {adminEmail}
+            </span>
+          </div>
           <form action={signOutAdmin}>
             <button
               type="submit"

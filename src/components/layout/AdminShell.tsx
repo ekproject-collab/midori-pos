@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState, type ReactNode } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 
 import { MidoriLogo } from "@/components/brand/MidoriLogo";
 import { signOutAdmin } from "@/services/supabase/auth-actions";
@@ -27,13 +27,23 @@ export interface AdminShellProps {
 export function AdminShell({ children, adminEmail }: AdminShellProps) {
   const pathname = usePathname();
 
-  const [sidebarOpen, setSidebarOpen] = useState<boolean>(() => {
+  // Fixed SSR-safe default (server has no localStorage) — the actual saved
+  // preference is applied after mount so the client's first render still
+  // matches the server's, avoiding a hydration mismatch. This can cause a
+  // one-frame flash back to "open" on reload if the admin had it hidden;
+  // that's the accepted trade-off (see CartProvider for the same pattern).
+  const [sidebarOpen, setSidebarOpen] = useState(true);
+
+  useEffect(() => {
     try {
-      return localStorage.getItem(SIDEBAR_KEY) !== "0";
+      if (localStorage.getItem(SIDEBAR_KEY) === "0") {
+        // eslint-disable-next-line react-hooks/set-state-in-effect -- client-only storage read, deliberately deferred past hydration (see comment above)
+        setSidebarOpen(false);
+      }
     } catch {
-      return true;
+      // ignore
     }
-  });
+  }, []);
 
   const toggleSidebar = () => {
     setSidebarOpen((open) => {

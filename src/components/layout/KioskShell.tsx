@@ -20,7 +20,10 @@ export interface KioskShellProps {
  */
 export function KioskShell({ children, footer, className }: KioskShellProps) {
   return (
-    <div className="kiosk-root bg-background flex min-h-dvh flex-col">
+    <div
+      className="kiosk-root bg-background flex min-h-dvh flex-col bg-cover bg-center bg-no-repeat"
+      style={{ backgroundImage: "url(/kiosk-background.jpeg)" }}
+    >
       <main className={cn("mx-auto w-full max-w-5xl flex-1 p-6", className)}>
         {children}
       </main>

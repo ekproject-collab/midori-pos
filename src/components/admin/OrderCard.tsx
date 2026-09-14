@@ -56,11 +56,11 @@ export function OrderCard({ order, isNew, onStatus, onPaid }: OrderCardProps) {
       <ul className="border-border space-y-0.5 border-t pt-2 text-sm">
         {order.detail_pesanan.map((line) => (
           <li key={line.id_detail} className="flex justify-between gap-2">
-            <span>
+            <span className="min-w-0">
               <span className="tabular-nums">{line.kuantitas}×</span>{" "}
               {line.produk?.nama_produk ?? `#${line.id_produk}`}
             </span>
-            <span className="text-muted tabular-nums">
+            <span className="text-muted shrink-0 whitespace-nowrap tabular-nums">
               {formatRupiah(line.subtotal)}
             </span>
           </li>
@@ -69,7 +69,9 @@ export function OrderCard({ order, isNew, onStatus, onPaid }: OrderCardProps) {
 
       <div className="border-border flex justify-between border-t pt-2 text-sm font-bold">
         <span>Total</span>
-        <span className="tabular-nums">{formatRupiah(order.total_harga)}</span>
+        <span className="shrink-0 whitespace-nowrap tabular-nums">
+          {formatRupiah(order.total_harga)}
+        </span>
       </div>
 
       <div className="flex flex-wrap gap-2 pt-1">

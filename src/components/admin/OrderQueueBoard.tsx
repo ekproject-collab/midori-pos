@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 
 import { useOrderQueue } from "@/hooks/useOrderQueue";
-import { Button, EmptyState, Skeleton } from "@/components/ui";
+import { Button, EmptyState, Pagination, Skeleton } from "@/components/ui";
 import { playChime } from "@/lib/beep";
 import { formatJakartaDate } from "@/lib/format";
 import type { StatusPesanan } from "@/types";
@@ -17,6 +17,7 @@ const COLUMNS: { status: StatusPesanan; label: string }[] = [
 ];
 
 const SOUND_KEY = "midori-queue-sound";
+const PAGE_SIZE = 5;
 
 export function OrderQueueBoard() {
   const { orders, loading, error, newIds, refetch, setStatus, setPaid } =
@@ -30,6 +31,11 @@ export function OrderQueueBoard() {
     }
   });
   const seenNew = useRef<Set<number>>(new Set());
+  const [pages, setPages] = useState<Record<StatusPesanan, number>>({
+    new: 1,
+    preparing: 1,
+    done: 1,
+  });
 
   // chime when a genuinely new order id appears
   useEffect(() => {
@@ -97,6 +103,13 @@ export function OrderQueueBoard() {
       <div className="grid gap-4 lg:grid-cols-3">
         {COLUMNS.map((col) => {
           const items = orders.filter((o) => o.status_pesanan === col.status);
+          const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));
+          const page = Math.min(pages[col.status], totalPages);
+          const pageItems = items.slice(
+            (page - 1) * PAGE_SIZE,
+            page * PAGE_SIZE,
+          );
+
           return (
             <section
               key={col.status}
@@ -114,15 +127,26 @@ export function OrderQueueBoard() {
                     Tidak ada pesanan
                   </p>
                 ) : (
-                  items.map((order) => (
-                    <OrderCard
-                      key={order.id_pesanan}
-                      order={order}
-                      isNew={newIds.has(order.id_pesanan)}
-                      onStatus={(status) => setStatus(order.id_pesanan, status)}
-                      onPaid={(status) => setPaid(order.id_pesanan, status)}
+                  <>
+                    {pageItems.map((order) => (
+                      <OrderCard
+                        key={order.id_pesanan}
+                        order={order}
+                        isNew={newIds.has(order.id_pesanan)}
+                        onStatus={(status) =>
+                          setStatus(order.id_pesanan, status)
+                        }
+                        onPaid={(status) => setPaid(order.id_pesanan, status)}
+                      />
+                    ))}
+                    <Pagination
+                      page={page}
+                      totalPages={totalPages}
+                      onChange={(next) =>
+                        setPages((prev) => ({ ...prev, [col.status]: next }))
+                      }
                     />
-                  ))
+                  </>
                 )}
               </div>
             </section>

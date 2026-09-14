@@ -5,5 +5,6 @@ export { QuantityStepper } from "./QuantityStepper";
 export { Field, Input, Select, Textarea } from "./Input";
 export { Modal } from "./Modal";
 export { EmptyState } from "./EmptyState";
+export { Pagination } from "./Pagination";
 export { Spinner, Skeleton } from "./Spinner";
 export { ToastProvider, useToast } from "./Toast";

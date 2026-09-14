@@ -7,9 +7,9 @@ import { buttonClass } from "@/components/ui";
 export default function KioskHomePage() {
   return (
     <KioskShell>
-      <div className="flex min-h-[60vh] flex-col items-center justify-center gap-8 text-center">
-        <div className="space-y-4">
-          <MidoriLogo size={168} className="mx-auto" priority />
+      <div className="flex h-full flex-col items-center justify-center gap-10 text-center">
+        <div className="space-y-5">
+          <MidoriLogo size={320} className="mx-auto" priority />
           <h1 className="text-6xl font-bold">Selamat datang di Midori</h1>
           <p className="text-muted text-2xl">Silakan mulai pesanan.</p>
         </div>

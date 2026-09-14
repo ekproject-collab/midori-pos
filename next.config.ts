@@ -13,6 +13,13 @@ const nextConfig: NextConfig = {
         pathname: "/storage/v1/object/public/**",
       },
     ],
+    // The brand logo is an SVG (public/brand/logo-midori.svg). next/image
+    // blocks SVG sources by default (XSS risk from untrusted uploads); ours
+    // is a trusted local asset we authored, so allow it — the CSP below still
+    // stops any embedded script from executing if the file is ever opened
+    // directly.
+    dangerouslyAllowSVG: true,
+    contentSecurityPolicy: "default-src 'self'; script-src 'none'; sandbox;",
   },
   async headers() {
     return [

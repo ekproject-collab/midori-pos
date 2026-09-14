@@ -9,7 +9,7 @@ export interface MidoriLogoProps {
   priority?: boolean;
 }
 
-/** The Midori | 茶 brand mark. Source is a square lockup (emblem + wordmark). */
+/** The Midori | 茶 brand mark. Source is a square SVG lockup (emblem + wordmark). */
 export function MidoriLogo({
   size = 40,
   className,
@@ -17,10 +17,10 @@ export function MidoriLogo({
 }: MidoriLogoProps) {
   return (
     <Image
-      src="/brand/logo-midori.png"
+      src="/brand/logo-midori.svg"
       alt="Midori — Matcha & More"
-      width={1254}
-      height={1254}
+      width={1500}
+      height={1500}
       priority={priority}
       className={cn("object-contain", className)}
       style={{ width: size, height: size }}

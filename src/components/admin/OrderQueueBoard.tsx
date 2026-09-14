@@ -64,7 +64,7 @@ export function OrderQueueBoard() {
 
   if (loading) {
     return (
-      <div className="mx-auto grid w-full max-w-2xl gap-4 xl:max-w-none xl:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3">
         {COLUMNS.map((c) => (
           <Skeleton key={c.status} className="h-64 w-full" />
         ))}
@@ -100,7 +100,7 @@ export function OrderQueueBoard() {
         </div>
       </div>
 
-      <div className="mx-auto grid w-full max-w-2xl gap-4 xl:max-w-none xl:grid-cols-3">
+      <div className="grid gap-4 lg:grid-cols-3">
         {COLUMNS.map((col) => {
           const items = orders.filter((o) => o.status_pesanan === col.status);
           const totalPages = Math.max(1, Math.ceil(items.length / PAGE_SIZE));

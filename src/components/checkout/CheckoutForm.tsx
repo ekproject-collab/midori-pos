@@ -117,26 +117,6 @@ export function CheckoutForm({
         onChange={(v) => set("tipe", v)}
       />
 
-      {values.tipe === "dine_in" && (
-        <Field
-          label="Nomor Meja"
-          required
-          htmlFor="meja"
-          error={showError("nomorMeja")}
-          size="lg"
-        >
-          <Input
-            id="meja"
-            size="lg"
-            value={values.nomorMeja}
-            onChange={(e) => set("nomorMeja", e.target.value)}
-            placeholder="mis. 4"
-            inputMode="numeric"
-            invalid={Boolean(showError("nomorMeja"))}
-          />
-        </Field>
-      )}
-
       <OptionGroup
         legend="Metode Pembayaran"
         value={values.metode}

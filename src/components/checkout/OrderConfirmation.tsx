@@ -1,5 +1,7 @@
 "use client";
 
+import Image from "next/image";
+
 import { Badge, Button } from "@/components/ui";
 import type { CartItem } from "@/lib/cart/types";
 import { selectLineSubtotal } from "@/lib/cart/reducer";
@@ -50,7 +52,9 @@ export function OrderConfirmation({
         <div className="flex flex-wrap gap-2">
           <Badge tone="info">
             {order.tipe_pesanan === "dine_in"
-              ? `Dine-in · Meja ${order.nomor_meja}`
+              ? order.nomor_meja
+                ? `Dine-in · Meja ${order.nomor_meja}`
+                : "Dine-in"
               : "Takeaway"}
           </Badge>
           <Badge tone="neutral">{isQris ? "QRIS" : "Cash"}</Badge>
@@ -85,9 +89,20 @@ export function OrderConfirmation({
         </p>
         <p className="text-ink-700 mt-1">
           {isQris
-            ? "Scan kode QRIS yang tersedia di meja kasir, lalu tunjukkan bukti bayar beserta nomor antrean ini."
+            ? "Scan kode QRIS di bawah ini, lalu tunjukkan bukti bayar beserta nomor antrean ini di kasir."
             : "Bayar tunai di kasir sambil menyebutkan nomor antrean di atas."}
         </p>
+        {isQris && (
+          <div className="border-border bg-surface mt-4 flex justify-center rounded-md border p-4">
+            <Image
+              src="/payment/qris.png"
+              alt="Kode QRIS untuk pembayaran"
+              width={240}
+              height={240}
+              className="h-auto w-full max-w-60"
+            />
+          </div>
+        )}
         <p className="text-muted mt-2">
           Kasir akan menandai pembayaranmu sebagai lunas setelah diverifikasi.
         </p>

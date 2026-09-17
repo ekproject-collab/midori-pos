@@ -54,7 +54,7 @@ export default function KioskCheckoutPage() {
     const result = await createOrder({
       namaPelanggan: values.nama,
       tipePesanan: values.tipe,
-      nomorMeja: values.tipe === "dine_in" ? values.nomorMeja : null,
+      nomorMeja: null,
       metodePembayaran: values.metode,
       items: snapshot.map((i) => ({
         id_produk: i.id_produk,

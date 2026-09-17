@@ -3,7 +3,6 @@ import type { MetodePembayaran, TipePesanan } from "@/types";
 export interface CheckoutValues {
   nama: string;
   tipe: TipePesanan;
-  nomorMeja: string;
   metode: MetodePembayaran;
 }
 
@@ -12,13 +11,14 @@ export type CheckoutErrors = Partial<Record<keyof CheckoutValues, string>>;
 export const defaultCheckoutValues: CheckoutValues = {
   nama: "",
   tipe: "takeaway",
-  nomorMeja: "",
   metode: "cash",
 };
 
 /**
- * Pure form validation — mirrors the DB constraints (create_order + the
- * pesanan CHECK) so the customer gets friendly messages before submit.
+ * Pure form validation — mirrors the DB constraints (create_order) so the
+ * customer gets friendly messages before submit. Table number is no longer
+ * collected: the shop rarely has one free, so dine-in and takeaway orders are
+ * both identified by the queue number on the receipt.
  */
 export function validateCheckout(values: CheckoutValues): CheckoutErrors {
   const errors: CheckoutErrors = {};
@@ -28,9 +28,6 @@ export function validateCheckout(values: CheckoutValues): CheckoutErrors {
   }
   if (values.tipe !== "dine_in" && values.tipe !== "takeaway") {
     errors.tipe = "Pilih tipe pesanan.";
-  }
-  if (values.tipe === "dine_in" && values.nomorMeja.trim().length === 0) {
-    errors.nomorMeja = "Nomor meja wajib untuk dine-in.";
   }
   if (values.metode !== "cash" && values.metode !== "qris") {
     errors.metode = "Pilih metode pembayaran.";

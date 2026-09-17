@@ -42,7 +42,9 @@ export function OrderCard({ order, isNew, onStatus, onPaid }: OrderCardProps) {
       <div className="flex flex-wrap gap-1.5">
         <Badge tone="info">
           {order.tipe_pesanan === "dine_in"
-            ? `Meja ${order.nomor_meja}`
+            ? order.nomor_meja
+              ? `Dine-in · Meja ${order.nomor_meja}`
+              : "Dine-in"
             : "Takeaway"}
         </Badge>
         <Badge tone="neutral">

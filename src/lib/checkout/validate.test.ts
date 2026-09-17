@@ -11,7 +11,6 @@ import {
 const valid: CheckoutValues = {
   nama: "Budi",
   tipe: "takeaway",
-  nomorMeja: "",
   metode: "qris",
 };
 
@@ -27,20 +26,8 @@ test("nama is required (whitespace does not count)", () => {
   );
 });
 
-test("nomor meja is required only for dine-in", () => {
-  assert.equal(
-    validateCheckout({ ...valid, tipe: "dine_in" }).nomorMeja,
-    "Nomor meja wajib untuk dine-in.",
-  );
-  assert.equal(
-    isCheckoutValid({ ...valid, tipe: "dine_in", nomorMeja: "4" }),
-    true,
-  );
-  // takeaway without a table is fine
-  assert.equal(
-    isCheckoutValid({ ...valid, tipe: "takeaway", nomorMeja: "" }),
-    true,
-  );
+test("dine-in does not require a table number", () => {
+  assert.equal(isCheckoutValid({ ...valid, tipe: "dine_in" }), true);
 });
 
 test("defaults are takeaway + cash and only miss the name", () => {

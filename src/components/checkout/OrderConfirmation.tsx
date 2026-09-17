@@ -97,8 +97,8 @@ export function OrderConfirmation({
             <Image
               src="/payment/qris.png"
               alt="Kode QRIS untuk pembayaran"
-              width={240}
-              height={240}
+              width={1137}
+              height={1600}
               className="h-auto w-full max-w-60"
             />
           </div>

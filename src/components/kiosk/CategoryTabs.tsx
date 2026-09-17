@@ -33,7 +33,7 @@ export function CategoryTabs({
               "shrink-0 border-b-2 px-5 py-3.5 text-lg font-semibold whitespace-nowrap",
               active
                 ? "border-matcha-600 text-matcha-800"
-                : "text-muted hover:text-ink-900 border-transparent",
+                : "text-ink-700 hover:text-ink-900 border-transparent",
             )}
           >
             {category.nama_kategori}

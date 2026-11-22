@@ -146,6 +146,7 @@ npm run dev            # http://localhost:3000
 - [ ] Tablet opens `/kiosk` in fullscreen/kiosk mode
 - [ ] Admin has `/admin` bookmarked on the cashier device
 - [ ] Supabase → Database → **Backups** noted (free tier keeps recent daily backups)
+- [ ] (Optional) Point UptimeRobot (every 5 min) at `https://<app>.vercel.app/health` and/or add `BACKEND_URL` (or `SUPABASE_URL` + `SUPABASE_ANON_KEY`) to GitHub → **Settings → Secrets and variables → Actions** for `.github/workflows/keep-alive.yml` (built-in daily Vercel Cron in `vercel.json` works automatically with zero setup)
 
 ---
 

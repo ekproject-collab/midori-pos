@@ -12,4 +12,4 @@ export * from "./orders";
 export * from "./realtime";
 export * from "./recap";
 export * from "./storage";
-export { checkSupabaseConnection } from "./health";
+export { checkSupabaseConnection, pingSupabaseDatabase } from "./health";

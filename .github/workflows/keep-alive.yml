@@ -1,0 +1,41 @@
+name: Supabase Keep-Alive
+
+on:
+  schedule:
+    # Mondays and Thursdays at 03:00 UTC (backup to daily Vercel Cron & UptimeRobot)
+    - cron: "0 3 * * 1,4"
+  workflow_dispatch:
+
+jobs:
+  keep-alive:
+    runs-on: ubuntu-latest
+    timeout-minutes: 2
+    steps:
+      - name: Ping backend /health or Supabase REST API
+        env:
+          BACKEND_URL: ${{ secrets.BACKEND_URL }}
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL || secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY || secrets.NEXT_PUBLIC_SUPABASE_ANON_KEY }}
+        run: |
+          if [ -n "$BACKEND_URL" ]; then
+            TARGET="${BACKEND_URL%/}/health"
+            echo "Pinging deployed app health endpoint: $TARGET"
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$TARGET")
+            echo "Health endpoint returned HTTP $STATUS"
+            if [ "$STATUS" -lt 200 ] || [ "$STATUS" -ge 300 ]; then
+              exit 1
+            fi
+          elif [ -n "$SUPABASE_URL" ] && [ -n "$SUPABASE_ANON_KEY" ]; then
+            TARGET="${SUPABASE_URL%/}/rest/v1/kategori?select=id_kategori&limit=1"
+            echo "Pinging Supabase REST API directly"
+            STATUS=$(curl -s -o /dev/null -w "%{http_code}" "$TARGET" \
+              -H "apikey: ${SUPABASE_ANON_KEY}" \
+              -H "Authorization: Bearer ${SUPABASE_ANON_KEY}")
+            echo "Supabase REST API returned HTTP $STATUS"
+            if [ "$STATUS" -lt 200 ] || [ "$STATUS" -ge 300 ]; then
+              exit 1
+            fi
+          else
+            echo "No keep-alive secrets configured. Set BACKEND_URL (e.g. https://your-app.vercel.app) or SUPABASE_URL + SUPABASE_ANON_KEY (or NEXT_PUBLIC_SUPABASE_URL + NEXT_PUBLIC_SUPABASE_ANON_KEY) in GitHub Actions secrets."
+            exit 1
+          fi

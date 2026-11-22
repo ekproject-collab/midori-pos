@@ -72,6 +72,17 @@ from the shop's own tablet share one IP, so raise `V_LIMIT` / `V_WINDOW` in
 `supabase/migrations/20260909120600_rate_limit_orders.sql` for a busier counter.
 Payment is always cashier-verified, so spam orders never become revenue.
 
+### Prevent Supabase's 7-day auto-pause
+
+Three layers are built in so the free-tier database stays awake without manual intervention:
+
+1. **Built-in Vercel Cron (`vercel.json`) + DB-touching `/health`:**
+   `GET /health` (and `HEAD /health`) runs a lightweight `HEAD` query against Supabase (`kategori` table), and `vercel.json` schedules a daily Vercel Cron job (`0 3 * * *`, 03:00 UTC every day) against `/health`. Because this runs inside the deployed Next.js app on Vercel, it automatically uses the project's existing `NEXT_PUBLIC_SUPABASE_URL` and `NEXT_PUBLIC_SUPABASE_ANON_KEY` environment variables — **zero extra secrets or setup required**.
+2. **UptimeRobot (every 5 minutes):**
+   Point UptimeRobot's free plan at `https://<your-vercel-domain>/health`. Because `/health` queries Supabase on every call and returns `503` if Supabase is unreachable, UptimeRobot both keeps Supabase continuously active and emails an alert if either Vercel or Supabase goes down.
+3. **GitHub Actions backup (`.github/workflows/keep-alive.yml`):**
+   Committed in `.github/workflows/keep-alive.yml` (runs Mondays and Thursdays at 03:00 UTC, plus manual `workflow_dispatch`). Add either `BACKEND_URL` (e.g. `https://<your-vercel-domain>`) or `SUPABASE_URL` + `SUPABASE_ANON_KEY` (or `NEXT_PUBLIC_SUPABASE_URL` + `NEXT_PUBLIC_SUPABASE_ANON_KEY`) under **Settings → Secrets and variables → Actions** in GitHub as a secondary backup ping.
+
 ## Project structure
 
 ```

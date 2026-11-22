@@ -1,7 +1,6 @@
 import { hasSupabaseEnv } from "@/lib/env";
 
 import { getSupabaseClient } from "./client";
-import { getSupabaseServerClient } from "./server";
 
 export type HealthResult = { ok: true } | { ok: false; message: string };
 
@@ -32,21 +31,25 @@ export async function checkSupabaseConnection(): Promise<HealthResult> {
 }
 
 /**
- * Server-side DB health check for `GET /health` (Vercel Cron, UptimeRobot,
- * GitHub Actions keep-alive). Runs a lightweight `HEAD` query against the
- * `kategori` table so Supabase registers real Postgres activity and never
- * triggers its 7-day inactivity auto-pause.
+ * DB health check for `GET /health` (Vercel Cron, UptimeRobot, GitHub Actions
+ * keep-alive). Runs a lightweight `HEAD` query against the public `kategori`
+ * table so Supabase registers real Postgres activity and never triggers its
+ * 7-day inactivity auto-pause.
+ *
+ * Uses the isomorphic anon client (`getSupabaseClient()`) rather than
+ * `server.ts` (`next/headers`) because `kategori` is public-read under RLS and
+ * `src/services/supabase/index.ts` is imported by Client Components.
  */
 export async function pingSupabaseDatabase(): Promise<HealthResult> {
   if (!hasSupabaseEnv()) {
     return {
       ok: false,
-      message: "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY.",
+      message:
+        "Missing NEXT_PUBLIC_SUPABASE_URL or NEXT_PUBLIC_SUPABASE_ANON_KEY.",
     };
   }
   try {
-    const supabase = await getSupabaseServerClient();
-    const { error } = await supabase
+    const { error } = await getSupabaseClient()
       .from("kategori")
       .select("id_kategori", { count: "exact", head: true })
       .limit(1);
